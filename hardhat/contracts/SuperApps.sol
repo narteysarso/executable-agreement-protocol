@@ -7,8 +7,6 @@ import {ISuperfluidToken} from "@superfluid-finance/ethereum-contracts/contracts
 import {IConstantFlowAgreementV1} from "@superfluid-finance/ethereum-contracts/contracts/interfaces/agreements/IConstantFlowAgreementV1.sol";
 import {CFAv1Library} from "@superfluid-finance/ethereum-contracts/contracts/apps/CFAv1Library.sol";
 
-import "hardhat/console.sol";
-
 error Unauthorized();
 
 contract SuperApps {
