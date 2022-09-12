@@ -4,10 +4,12 @@ pragma solidity 0.8.14;
 import "./base/AgreementDeliverableManager.sol";
 import "./base/AgreementInfoManager.sol";
 import "./base/AgreementOfferManager.sol";
+import "./base/AgreementFundsManager.sol";
 
 // @title Executable Agreement is an smart contract implementation of legal agreement.
 // @author Nartey Kodjo-Sarso - <narteysarso@gmail.com>
 contract ExecutableAgreement is
+    AgreementFundsManager,
     AgreementOfferManager,
     AgreementInfoManager,
     AgreementDeliverableManager
@@ -30,37 +32,31 @@ contract ExecutableAgreement is
             _offerType,
             _position,
             _duration,
-            _contractSum,
-            _targetToken,
             _status,
             _description,
             _location
         );
 
         setupDeliverables(_deliverables, _executors);
+
+        setupContractFund(_contractSum, _targetToken, address(0x0));
     }
 }
 
-
 //---------------------------Second Part -------------------------------------------
-// @title Arbiter specifies and handle staking and arbitration, and realese of stake 
-//        in cases of: 
+// @title Arbiter specifies and handle staking and arbitration, and realese of stake
+//        in cases of:
 //        - Agreement termination by any party
 //        - Agreement expiration without contract completion:
 //              - any party failed to deliver on promise
 //              - all party fulfilled their promise
 //              - unforseen natural disasters, events beyond control of any party
 //              - declared liabilities, vulnerabilities, risks, and limitations.
-//        
+//
 contract Arbiter {
 
 }
 
-contract AgreementSigningManager {
+contract AgreementSigningManager {}
 
-}
-
-
-contract AgreementSBT {
-
-}
+contract AgreementSBT {}

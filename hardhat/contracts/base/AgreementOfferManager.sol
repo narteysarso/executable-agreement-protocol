@@ -20,8 +20,6 @@ contract AgreementOfferManager {
 
     uint64 public duration;
 
-    uint256 public contractSum;
-
     Status public status;
 
     string public title;
@@ -30,13 +28,9 @@ contract AgreementOfferManager {
 
     OfferType public offerType;
 
-    address public targetToken;
-
     event OfferCreated(
         bytes32 position,
         uint64 duration,
-        uint256 contractSum,
-        address targetToken,
         Status status,
         string title,
         string location,
@@ -47,16 +41,12 @@ contract AgreementOfferManager {
         OfferType _offerType,
         bytes32 _position,
         uint64 _duration,
-        uint _contractSum,
-        address _targetToken,
         Status _status,
         string memory _title,
         string memory _location
     ) internal {
         position = _position;
         duration = _duration;
-        contractSum = _contractSum;
-        targetToken = _targetToken;
         status = _status;
         title = _title;
         location = _location;
@@ -65,8 +55,6 @@ contract AgreementOfferManager {
         emit OfferCreated(
             _position,
             _duration,
-            _contractSum,
-            _targetToken,
             _status,
             _title,
             _location,

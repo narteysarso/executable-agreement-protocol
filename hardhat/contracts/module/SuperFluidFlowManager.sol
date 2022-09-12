@@ -7,12 +7,11 @@ import {ISuperfluidToken} from "@superfluid-finance/ethereum-contracts/contracts
 import {IConstantFlowAgreementV1} from "@superfluid-finance/ethereum-contracts/contracts/interfaces/agreements/IConstantFlowAgreementV1.sol";
 import {CFAv1Library} from "@superfluid-finance/ethereum-contracts/contracts/apps/CFAv1Library.sol";
 
+
 error Unauthorized();
 
-contract SuperApps {
-    // ---------------------------------------------------------------------------------------------
-    // STATE VARIABLES
-
+contract SuperFluidFlowManager {
+   
     /// @notice Owner.
     address public owner;
 
@@ -23,13 +22,13 @@ contract SuperApps {
     /// @notice Allow list.
     mapping(address => bool) public accountList;
 
-    uint public lastTimestamp;
+    uint lastTimestamp;
 
-    uint96 public flowRate;
+    uint96 flowRate;
 
-    uint public totalsecs;
+    uint totalsecs;
 
-    uint public totalAmount;
+    uint totalAmount;
 
     event StreamCreated(
         ISuperfluidToken token,
@@ -39,9 +38,11 @@ contract SuperApps {
         int96 flowRate
     );
 
-    constructor(ISuperfluid host, address _owner) {
-        assert(address(host) != address(0));
+    function initialize(address _host, address _owner) external {
+        assert(_host != address(0));
         owner = _owner;
+
+        ISuperfluid host = ISuperfluid(_host);
 
         // Initialize CFA Library
         cfaV1 = CFAv1Library.InitData(
@@ -60,7 +61,7 @@ contract SuperApps {
 
     /// @notice Add account to allow list.
     /// @param _account Account to allow.
-    function allowAccount(address _account) external {
+    function allowAccount(address _account) internal {
         if (msg.sender != owner) revert Unauthorized();
 
         accountList[_account] = true;
@@ -68,7 +69,7 @@ contract SuperApps {
 
     /// @notice Removes account from allow list.
     /// @param _account Account to disallow.
-    function removeAccount(address _account) external {
+    function removeAccount(address _account) internal {
         if (msg.sender != owner) revert Unauthorized();
 
         accountList[_account] = false;
@@ -76,7 +77,7 @@ contract SuperApps {
 
     /// @notice Transfer ownership.
     /// @param _newOwner New owner account.
-    function changeOwner(address _newOwner) external {
+    function changeOwner(address _newOwner) internal {
         if (msg.sender != owner) revert Unauthorized();
 
         owner = _newOwner;
@@ -86,18 +87,20 @@ contract SuperApps {
     /// @dev This requires a super token ERC20 approval.
     /// @param _token Super Token to transfer.
     /// @param _amount Amount to transfer.
-    function sendLumpSumToContract(ISuperToken _token, uint256 _amount) public {
-        if (!accountList[msg.sender] && msg.sender != owner)
+    function sendLumpSumToContract(address _token, uint256 _amount) external {
+        if ( msg.sender != owner)
             revert Unauthorized();
 
-        _token.transferFrom(msg.sender, address(this), _amount);
+        ISuperToken token = ISuperToken(_token);
+
+        token.transferFrom(msg.sender, address(this), _amount);
     }
 
     /// @notice Withdraw funds from the contract.
     /// @param _token Token to withdraw.
     /// @param _amount Amount to withdraw.
     function withdrawFunds(ISuperToken _token, uint256 _amount) external {
-        if (!accountList[msg.sender] && msg.sender != owner)
+        if ( msg.sender != owner)
             revert Unauthorized();
 
         _token.transfer(msg.sender, _amount);
@@ -112,43 +115,29 @@ contract SuperApps {
         address receiver,
         int96 _flowRate
     ) internal {
-        if (!accountList[msg.sender] && msg.sender != owner)
+        if (msg.sender != owner)
             revert Unauthorized();
 
         cfaV1.createFlow(receiver, _token, _flowRate);
     }
 
-    /// @notice Update flow from contract to specified address.
-    /// @param _token Token to stream.
-    /// @param receiver Receiver of stream.
-    /// @param _flowRate Flow rate per second to stream.
-    function updateFlowFromContract(
-        ISuperfluidToken _token,
-        address receiver,
-        int96 _flowRate
-    ) internal {
-        if (!accountList[msg.sender] && msg.sender != owner)
-            revert Unauthorized();
-
-        cfaV1.updateFlow(receiver, _token, _flowRate);
-    }
-
+    
     /// @notice Delete flow from contract to specified address.
     /// @param _token Token to stop streaming.
     /// @param receiver Receiver of stream.
     function deleteFlowFromContract(ISuperfluidToken _token, address receiver)
         internal
     {
-        if (!accountList[msg.sender] && msg.sender != owner)
+        if (msg.sender != owner)
             revert Unauthorized();
 
         cfaV1.deleteFlow(address(this), receiver, _token);
     }
 
-    function clearFlowDetails()
-        public
+    function resetFlowDetails()
+        external
     {
-        if (!accountList[msg.sender] && msg.sender != owner)
+        if ( msg.sender != owner)
             revert Unauthorized();
 
         lastTimestamp = 0;
@@ -158,14 +147,18 @@ contract SuperApps {
     }
 
     function createDeliverableFlow(
-        ISuperfluidToken _token,
+        address _token,
         address _receiver,
         uint _totalAmount,
         uint _totalsecs
     ) external returns (bool, bytes memory) {
+        if ( msg.sender != owner)
+            revert Unauthorized();
+
+        ISuperfluidToken token = ISuperfluidToken(_token);
         // get flow information getFlow(_token, receiver, sender);
         (, int96 cflowRate, , ) = cfaV1.cfa.getFlow(
-            _token,
+            token,
             address(this),
             _receiver
         );
@@ -181,12 +174,12 @@ contract SuperApps {
 
             lastTimestamp = block.timestamp;
 
-            deleteFlowFromContract(_token, _receiver);
+            deleteFlowFromContract(token, _receiver);
 
-            createFlowFromContract(_token, _receiver, int96(_flowRate));
+            createFlowFromContract(token, _receiver, int96(_flowRate));
 
             emit StreamCreated(
-                _token,
+                token,
                 _receiver,
                 totalAmount,
                 _totalsecs,
@@ -202,10 +195,10 @@ contract SuperApps {
 
         uint96 _flowRate = uint96(_totalAmount / _totalsecs);
 
-        createFlowFromContract(_token, _receiver, int96(_flowRate));
+        createFlowFromContract(token, _receiver, int96(_flowRate));
 
         emit StreamCreated(
-            _token,
+            token,
             _receiver,
             _totalAmount,
             _totalsecs,

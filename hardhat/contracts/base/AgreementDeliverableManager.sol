@@ -92,6 +92,7 @@ contract AgreementDeliverableManager is AgreementDeliverableExecuteManager {
         deliverable.validatorThreshold = _deliverable.validatorThreshold;
         deliverable.lockTime = _deliverable.lockTime;
         deliverable.flowRatePerSecond = _deliverable.flowRatePerSecond;
+        deliverable.receiver = _deliverable.receiver;
 
         deliverablesCount += 1;
     }

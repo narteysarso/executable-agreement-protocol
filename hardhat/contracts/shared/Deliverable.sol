@@ -7,7 +7,9 @@ struct Deliverable {
     uint24 lockTime;
     uint24 flowRatePerSecond;
     uint payoutAmount;
+    address receiver;
     bytes32 key;
     string title;
     string description;
+    
 }

@@ -6,6 +6,7 @@ interface IExecuteManager {
         uint index,
         uint lockTime,
         uint flowRatePerSecond,
-        uint payoutAmount
+        uint payoutAmount,
+        address receiver
     ) external returns (bool, bytes memory);
 }

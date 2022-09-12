@@ -89,7 +89,8 @@ contract AgreementDeliverableExecuteManager {
                 _executableIndex,
                 _deliverable.lockTime,
                 _deliverable.flowRatePerSecond,
-                _deliverable.payoutAmount
+                _deliverable.payoutAmount,
+                _deliverable.receiver
             );
 
         require(success, string(message));
