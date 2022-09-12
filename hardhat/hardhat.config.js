@@ -1,6 +1,22 @@
-require("@nomicfoundation/hardhat-toolbox");
+require("dotenv").config()
 
-/** @type import('hardhat/config').HardhatUserConfig */
+require("@nomiclabs/hardhat-etherscan")
+require("@nomiclabs/hardhat-ethers")
+require("hardhat-gas-reporter")
+require("solidity-coverage")
+
 module.exports = {
-  solidity: "0.8.9",
-};
+  solidity: "0.8.14",
+  networks:{
+    mumbai: {
+      url: process.env.MUMBAI_RPC_URL,
+      accounts: [process.env.ACCOUNT_PRIVATE_KEY]
+    }
+  },
+  etherscan: {
+    apiKey: {
+      polygonMumbai: process.env.POLYGONSCAN_KEY
+    }
+  }
+
+}
