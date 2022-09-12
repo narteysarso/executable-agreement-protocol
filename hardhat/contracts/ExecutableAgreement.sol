@@ -42,8 +42,6 @@ contract ExecutableAgreement is
 }
 
 
-
-
 //---------------------------Second Part -------------------------------------------
 // @title Arbiter specifies and handle staking and arbitration, and realese of stake 
 //        in cases of: 
