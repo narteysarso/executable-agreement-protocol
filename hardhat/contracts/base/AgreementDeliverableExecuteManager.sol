@@ -87,8 +87,7 @@ contract AgreementDeliverableExecuteManager {
             _executor._address
         ).execute(
                 _executableIndex,
-                _deliverable.lockTime,
-                _deliverable.flowRatePerSecond,
+                _deliverable.totalSeconds,
                 _deliverable.payoutAmount
             );
 
