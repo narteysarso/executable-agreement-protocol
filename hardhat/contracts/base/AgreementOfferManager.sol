@@ -16,7 +16,7 @@ contract AgreementOfferManager {
         UNAVAILABLE
     }
 
-    bytes32 public position;
+    string public position;
 
     uint64 public duration;
 
@@ -33,7 +33,7 @@ contract AgreementOfferManager {
     address public targetToken;
 
     event OfferCreated(
-        bytes32 position,
+        string position,
         uint64 duration,
         uint256 contractSum,
         address targetToken,
@@ -45,7 +45,7 @@ contract AgreementOfferManager {
 
     function setupOffer(
         OfferType _offerType,
-        bytes32 _position,
+        string memory _position,
         uint64 _duration,
         uint _contractSum,
         address _targetToken,

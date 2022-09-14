@@ -88,10 +88,8 @@ contract AgreementDeliverableManager is AgreementDeliverableExecuteManager {
         deliverable.title = _deliverable.title;
         deliverable.description = _deliverable.description;
         deliverable.payoutAmount = _deliverable.payoutAmount;
-        deliverable.key = keccak256(bytes(deliverable.title));
         deliverable.validatorThreshold = _deliverable.validatorThreshold;
-        deliverable.lockTime = _deliverable.lockTime;
-        deliverable.flowRatePerSecond = _deliverable.flowRatePerSecond;
+        deliverable.totalSeconds = _deliverable.totalSeconds;
 
         deliverablesCount += 1;
     }
