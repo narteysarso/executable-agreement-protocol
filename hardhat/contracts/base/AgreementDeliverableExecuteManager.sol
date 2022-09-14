@@ -22,14 +22,20 @@ contract AgreementDeliverableExecuteManager {
     mapping(uint => uint) public deliverableExecutorCount;
 
     event DeliverableExecutorAdded(
+        address indexed proxy,
         uint indexed deliverableIndex,
-        uint indexed _executorcount,
-        Executor executor
+        uint indexed _executorcount
     );
     event DeliverableExecutorRemoved(
+        address indexed proxy,
         uint indexed deliverableIndex,
-        uint indexed _executorcount,
-        Executor executor
+        uint indexed _executorIndex
+    );
+    
+    event DeliverableCompleted(
+        address indexed proxy,
+        uint indexed deliverableIndex,
+        uint indexed _executorIndex
     );
 
     function _addExecutor(Executor memory _executor) internal {
@@ -39,7 +45,7 @@ contract AgreementDeliverableExecuteManager {
         executors[_executor.deliverable] = _executor;
         deliverableExecutorCount[_executor.deliverable] += 1;
 
-        emit DeliverableExecutorAdded(_executor.deliverable, _index, _executor);
+        emit DeliverableExecutorAdded(address(this), _executor.deliverable, _index);
     }
 
     function _setTimeLock(
@@ -70,9 +76,9 @@ contract AgreementDeliverableExecuteManager {
         delete executors[_executableIndex];
 
         emit DeliverableExecutorRemoved(
+            address(this),
             _deliverableIndex,
-            _deliverableExecutableIndex,
-            _executor
+            _deliverableExecutableIndex
         );
     }
 
@@ -83,15 +89,22 @@ contract AgreementDeliverableExecuteManager {
         require(_executor._address != address(0), "EC401");
         require(!isLocked(_executableIndex), "EC402");
 
-        (bool success, bytes memory message) = IExecuteManager(
-            _executor._address
-        ).execute(
-                _executableIndex,
-                _deliverable.totalSeconds,
-                _deliverable.payoutAmount
-            );
+        // (bool success, bytes memory message) = IExecuteManager(
+        //     _executor._address
+        // ).execute(
+        //         _executableIndex,
+        //         _deliverable.totalSeconds,
+        //         _deliverable.payoutAmount,
+        //         _deliverable.receiver
+        //     );
 
-        require(success, string(message));
+        // require(success, string(message));
+
+        emit DeliverableCompleted(
+            address(this),
+            _executableIndex,
+            _executableIndex
+        );
     }
 
     function isLocked(uint _executableIndex) internal view returns (bool) {

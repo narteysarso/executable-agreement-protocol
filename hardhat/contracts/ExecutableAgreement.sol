@@ -11,20 +11,20 @@ import "./base/AgreementFundsManager.sol";
 contract ExecutableAgreement is
     AgreementFundsManager,
     AgreementOfferManager,
-    AgreementInfoManager,
     AgreementDeliverableManager
 {
+    address public constant HOST = 0x22ff293e14F1EC3A09B137e9e06084AFd63adDF9;
     function createAgreement(
         OfferType _offerType,
         string memory _position,
         uint64 _duration,
         uint _contractSum,
         address _targetToken,
-        Status _status,
         string memory _description,
         string memory _location,
         Deliverable[] memory _deliverables,
-        Executor[] memory _executors
+        Executor[] memory _executors,
+        Validator[] memory _validators
     ) public {
         require(msg.sender != address(0), "EC500");
 
@@ -32,14 +32,13 @@ contract ExecutableAgreement is
             _offerType,
             _position,
             _duration,
-            _status,
             _description,
             _location
         );
 
-        setupDeliverables(_deliverables, _executors);
+        setupDeliverables(_deliverables, _executors, _validators);
 
-        setupContractFund(_contractSum, _targetToken, address(0x0));
+        setupContractFund(_contractSum, _targetToken, HOST );
     }
 }
 

@@ -11,8 +11,9 @@ contract AgreementDeliverableManager is AgreementDeliverableExecuteManager {
         YES
     }
 
-    struct Validators {
-        address _user;
+    struct Validator {
+        uint16 deliverable;
+        address _address;
     }
 
     address internal constant SENTINEL_VALIDATORS = address(0x1);
@@ -44,16 +45,17 @@ contract AgreementDeliverableManager is AgreementDeliverableExecuteManager {
     event DeliverableRemoved(uint16 deliverableIndex, address user);
     event DeliverableValidated(uint16 deliverableIndex, uint16 validatorIndex);
     event ValidatorAdded(
+        address indexed proxy,
         uint16 deliverableIndex,
-        address _user,
-        address validator
+        address _validator
     );
     event ValidatorRemoved(
+        address indexed proxy,
         uint16 deliverableIndex,
-        address _user,
-        address validator
+        address _validator
     );
     event ValidatorVoted(
+        address indexed proxy,
         uint16 deliverableIndex,
         address _validator,
         ValidatorVote _validatorVote
@@ -63,7 +65,8 @@ contract AgreementDeliverableManager is AgreementDeliverableExecuteManager {
 
     function setupDeliverables(
         Deliverable[] memory _deliverables,
-        Executor[] memory _executors
+        Executor[] memory _executors,
+        Validator[] memory _validators
     ) internal {
         for (uint i = 0; i < _deliverables.length; i++) {
             _addDeliverable(_deliverables[i]);
@@ -71,6 +74,10 @@ contract AgreementDeliverableManager is AgreementDeliverableExecuteManager {
 
         for (uint i = 0; i < _executors.length; i++) {
             _addExecutor(_executors[i]);
+        }
+        
+        for (uint i = 0; i < _validators.length; i++) {
+            _addValidator(_validators[i]);
         }
 
         emit DeliverableSetup(_deliverables.length, _deliverables);
@@ -90,47 +97,48 @@ contract AgreementDeliverableManager is AgreementDeliverableExecuteManager {
         deliverable.payoutAmount = _deliverable.payoutAmount;
         deliverable.validatorThreshold = _deliverable.validatorThreshold;
         deliverable.totalSeconds = _deliverable.totalSeconds;
+        deliverable.receiver = _deliverable.receiver;
 
         deliverablesCount += 1;
     }
 
-    function addValidator(uint16 _deliverableIndex, address _validator) public {
-        _addValidator(_deliverableIndex, _validator);
+    function addValidator(Validator memory _validator) public {
+        _addValidator( _validator);
 
-        emit ValidatorAdded(_deliverableIndex, msg.sender, _validator);
+        emit ValidatorAdded(address(this), _validator.deliverable, _validator._address);
     }
 
-    function _addValidator(uint16 _deliverableIndex, address _validator)
+    function _addValidator(Validator memory _validator)
         internal
     {
         // Check if deliverable exists
-        require(deliverableExists(_deliverableIndex), "EC404");
+        require(deliverableExists(_validator.deliverable), "EC404");
 
         // Validator address cannot be null, this contract, or the sentinel
         require(
-            _validator != address(0) &&
-                _validator != address(this) &&
-                _validator != SENTINEL_VALIDATORS,
+            _validator._address != address(0) &&
+                _validator._address != address(this) &&
+                _validator._address != SENTINEL_VALIDATORS,
             "EC400"
         );
 
         // No duplicate validator allowed
         require(
-            validators[_deliverableIndex][_validator] == address(0),
+            validators[_validator.deliverable][_validator._address] == address(0),
             "EC409"
         );
 
-        if (validators[_deliverableIndex][SENTINEL_VALIDATORS] == address(0)) {
-            validators[_deliverableIndex][SENTINEL_VALIDATORS] = _validator;
-            validators[_deliverableIndex][_validator] = SENTINEL_VALIDATORS;
+        if (validators[_validator.deliverable][SENTINEL_VALIDATORS] == address(0)) {
+            validators[_validator.deliverable][SENTINEL_VALIDATORS] = _validator._address;
+            validators[_validator.deliverable][_validator._address] = SENTINEL_VALIDATORS;
         } else {
-            validators[_deliverableIndex][_validator] = validators[
-                _deliverableIndex
+            validators[_validator.deliverable][_validator._address] = validators[
+                _validator.deliverable
             ][SENTINEL_VALIDATORS];
-            validators[_deliverableIndex][SENTINEL_VALIDATORS] = _validator;
+            validators[_validator.deliverable][SENTINEL_VALIDATORS] = _validator._address;
         }
 
-        validatorsCount[_deliverableIndex] += 1;
+        validatorsCount[_validator.deliverable] += 1;
     }
 
     function removeValidator(
@@ -168,10 +176,10 @@ contract AgreementDeliverableManager is AgreementDeliverableExecuteManager {
             validateCounts[_deliverableIndex] -= 1;
         }
 
-        emit ValidatorRemoved(_deliverableIndex, msg.sender, _validator);
+        emit ValidatorRemoved(address(this), _deliverableIndex, _validator);
     }
 
-    function validatorVote(uint16 _deliverableIndex, ValidatorVote _vote)
+    function vote(uint16 _deliverableIndex, ValidatorVote _vote)
         public
     {
         // Validator must be registered.
@@ -187,7 +195,7 @@ contract AgreementDeliverableManager is AgreementDeliverableExecuteManager {
             validateCounts[_deliverableIndex] += 1;
         }
 
-        emit ValidatorVoted(_deliverableIndex, msg.sender, _vote);
+        emit ValidatorVoted(address(this), _deliverableIndex, msg.sender, _vote);
 
         // If number of validators is equal to (or more than) validator threshold.
         if (

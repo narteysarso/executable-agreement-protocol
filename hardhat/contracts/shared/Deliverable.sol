@@ -7,5 +7,6 @@ struct Deliverable {
     uint payoutAmount;
     string title;
     string description;
+    address receiver;
     
 }

@@ -13,7 +13,8 @@ contract AgreementOfferManager {
 
     enum Status {
         AVAILABLE,
-        UNAVAILABLE
+        UNAVAILABLE,
+        COMPLETED
     }
 
     string public position;
@@ -41,13 +42,12 @@ contract AgreementOfferManager {
         OfferType _offerType,
         string memory _position,
         uint64 _duration,
-        Status _status,
         string memory _title,
         string memory _location
     ) internal {
         position = _position;
         duration = _duration;
-        status = _status;
+        status = Status.AVAILABLE;
         title = _title;
         location = _location;
         offerType = _offerType;
@@ -55,7 +55,7 @@ contract AgreementOfferManager {
         emit OfferCreated(
             _position,
             _duration,
-            _status,
+            status,
             _title,
             _location,
             _offerType

@@ -28,24 +28,21 @@ contract AgreementFundsManager is IExecuteManager{
         targetToken = _targetToken;
 
         superFluidFlowManager = new SuperFluidFlowManager();
-        superFluidFlowManager.initialize(_superfluidChainHost, address(this));
+        // TODO:  fix `_superfluidChainHost` bug -  superFluidFlowManager.initialize(_superfluidChainHost, address(this));
 
         emit FundMangerSet(_contractSum, _targetToken);
     }
 
     function execute(
         uint _index,
-        uint _lockTime,
-        uint _flowRatePerSecond,
+        uint _totalSecond,
         uint _payoutAmount,
         address _receiver
     ) external returns (bool, bytes memory) {
 
         require(_receiver != address(0), "CFM400");
-
-        uint _duration = _payoutAmount / _flowRatePerSecond;
         
-        makePayment(_index, _receiver, _payoutAmount, _duration);
+        makePayment(_index, _receiver, _payoutAmount, _totalSecond);
 
         return (true, bytes(""));
     }
