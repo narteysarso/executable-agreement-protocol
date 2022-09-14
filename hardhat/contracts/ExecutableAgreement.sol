@@ -2,43 +2,67 @@
 pragma solidity 0.8.14;
 
 import "./base/AgreementDeliverableManager.sol";
-import "./base/AgreementInfoManager.sol";
 import "./base/AgreementOfferManager.sol";
 import "./base/AgreementFundsManager.sol";
+import "./base/AgreementSigningManager.sol";
 
 // @title Executable Agreement is an smart contract implementation of legal agreement.
 // @author Nartey Kodjo-Sarso - <narteysarso@gmail.com>
 contract ExecutableAgreement is
     AgreementFundsManager,
     AgreementOfferManager,
-    AgreementDeliverableManager
+    AgreementDeliverableManager,
+    AgreementSigningManager
 {
+
+    struct AgreementData {
+        OfferType offerType;
+        string position;
+        uint64 duration;
+        uint contractSum;
+        address targetToken;
+        string contractTokenURI;
+        string name;
+        string symbol;
+        string description;
+        string location;
+        address[] signers;
+        Deliverable[] deliverables;
+        Executor[] executors;
+        Validator[] validators;
+    }
+
     address public constant HOST = 0x22ff293e14F1EC3A09B137e9e06084AFd63adDF9;
+
+    string public contractTokenURI;
+
     function createAgreement(
-        OfferType _offerType,
-        string memory _position,
-        uint64 _duration,
-        uint _contractSum,
-        address _targetToken,
-        string memory _description,
-        string memory _location,
-        Deliverable[] memory _deliverables,
-        Executor[] memory _executors,
-        Validator[] memory _validators
+        AgreementData memory data
     ) public {
+
         require(msg.sender != address(0), "EC500");
 
-        setupOffer(
-            _offerType,
-            _position,
-            _duration,
-            _description,
-            _location
-        );
+        contractTokenURI = data.contractTokenURI;
 
-        setupDeliverables(_deliverables, _executors, _validators);
+        {
+            setupOffer(
+                data.offerType,
+                data.position,
+                data.duration,
+                data.description,
+                data.location
+            );
 
-        setupContractFund(_contractSum, _targetToken, HOST );
+            setupDeliverables(data.deliverables, data.executors, data.validators);
+
+        }
+
+        {
+            setupContractFund(data.contractSum, data.targetToken, HOST);
+
+            setupAgreementSigning(data.name, data.symbol, data.signers);
+        }
+
     }
 }
 
@@ -55,7 +79,3 @@ contract ExecutableAgreement is
 contract Arbiter {
 
 }
-
-contract AgreementSigningManager {}
-
-contract AgreementSBT {}

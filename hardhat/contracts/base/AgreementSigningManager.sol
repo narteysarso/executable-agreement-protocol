@@ -1,17 +1,13 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.14;
 
-import "./token/ERC721.sol";
+import "../token/ERC721.sol";
 
 contract AgreementSigningManager is ERC721 {
 
     uint tokenCount;
 
-    string tokenURI;
-
-    address issuer;
-
-    address signer;
+    string tokenUri;
 
     address internal constant SENTINEL_SIGNER = address(0x2);
     address internal constant SENTINEL_SIGNATURE = address(0x3);
@@ -20,21 +16,21 @@ contract AgreementSigningManager is ERC721 {
 
     mapping(address => address) signatures;
 
-    event AgreementSigned(address indexed proxy, address signer, uint tokenId)
+    event AgreementSigned(address indexed proxy, address signer, uint tokenId);
 
     function setupAgreementSigning (string memory _name, string memory _symbol, address[] memory _signers ) internal {
         setupToken(_name,_symbol);
 
-        for(let i = 0; i < _signers.length; i++){
-            _addSigner(signers[i]);
+        for(uint i = 0; i < _signers.length; i++){
+            _addSigner(_signers[i]);
         }
     }
 
-    function signAgreement(uint tokenid) external {
+    function signAgreement() external {
         require(msg.sender != address(0) && msg.sender != SENTINEL_SIGNATURE && msg.sender != address(this), "AS400");
         require(signatures[msg.sender] == address(0));
-        require(, "AS400");
-        require(!_hasSigned(msg.sender), "AS406");
+        require(isSigner(msg.sender), "AS400");
+        require(!hasSigned(msg.sender), "AS406");
 
         tokenCount++;
         _mint(msg.sender, tokenCount);
@@ -47,10 +43,10 @@ contract AgreementSigningManager is ERC721 {
 
         signatures[SENTINEL_SIGNATURE] = msg.sender;
 
-        emit AgreementSigned(address(this), msg.signer, tokenCount);
+        emit AgreementSigned(address(this), msg.sender, tokenCount);
     }
 
-    function _addSigner(address _signer){
+    function _addSigner(address _signer) internal {
         require(_signer != address(0) && _signer != SENTINEL_SIGNER && _signer != address(this), "AS400");
         require(signers[_signer] == address(0));
 
@@ -63,19 +59,19 @@ contract AgreementSigningManager is ERC721 {
         signers[SENTINEL_SIGNER] = _signer;
     }
 
-    function _hasSigned(address _signer) internal view returns(bool){
+    function hasSigned(address _signer) public view returns(bool){
         return _signer != SENTINEL_SIGNATURE && signatures[_signer] != address(0);
     }
 
-    function _isAssigner(address _signer) internal view returns(bool){
+    function isSigner(address _signer) public view returns(bool){
         return _signer != SENTINEL_SIGNER && signers[_signer] != address(0);
     }
 
     function _baseURI() internal view override returns (string memory) {
-        return tokenURI;
+        return tokenUri;
     }
 
-    function setTokenURI(string memory _tokenURI) external {
-        tokenURI = _tokenURI;
+    function setTokenURI(string memory _tokenUri) external {
+        tokenUri = _tokenUri;
     }
 }

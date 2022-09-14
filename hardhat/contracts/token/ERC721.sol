@@ -3,13 +3,13 @@
 
 pragma solidity ^0.8.0;
 
-import "@openzeppelin-contracts/contracts/token/ERC721/IERC721.sol";
-import "@openzeppelin-contracts/contracts/token/ERC721/IERC721Receiver.sol";
-import "@openzeppelin-contracts/contracts/token/ERC721/extensions/IERC721Metadata.sol";
-import "@openzeppelin-contracts/contracts/utils/Address.sol";
-import "@openzeppelin-contracts/contracts/utils/Context.sol";
-import "@openzeppelin-contracts/contracts/utils/Strings.sol";
-import "@openzeppelin-contracts/contracts/utils/introspection/ERC165.sol";
+import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
+import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol";
+import "@openzeppelin/contracts/utils/Address.sol";
+import "@openzeppelin/contracts/utils/Context.sol";
+import "@openzeppelin/contracts/utils/Strings.sol";
+import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
 
 /**
  * @dev Implementation of https://eips.ethereum.org/EIPS/eip-721[ERC721] Non-Fungible Token Standard, including
@@ -41,7 +41,7 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
     /**
      * @dev Initializes the contract by setting a `name` and a `symbol` to the token collection.
      */
-    function setupToken (string memory name_, string memory symbol_) external {
+    function setupToken (string memory name_, string memory symbol_) internal {
         _name = name_;
         _symbol = symbol_;
     }
