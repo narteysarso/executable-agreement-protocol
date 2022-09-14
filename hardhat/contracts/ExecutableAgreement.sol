@@ -16,7 +16,7 @@ contract ExecutableAgreement is
 {
     function createAgreement(
         OfferType _offerType,
-        bytes32 _position,
+        string memory _position,
         uint64 _duration,
         uint _contractSum,
         address _targetToken,

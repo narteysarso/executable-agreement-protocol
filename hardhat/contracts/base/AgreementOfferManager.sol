@@ -16,7 +16,7 @@ contract AgreementOfferManager {
         UNAVAILABLE
     }
 
-    bytes32 public position;
+    string public position;
 
     uint64 public duration;
 
@@ -29,7 +29,7 @@ contract AgreementOfferManager {
     OfferType public offerType;
 
     event OfferCreated(
-        bytes32 position,
+        string position,
         uint64 duration,
         Status status,
         string title,
@@ -39,7 +39,7 @@ contract AgreementOfferManager {
 
     function setupOffer(
         OfferType _offerType,
-        bytes32 _position,
+        string memory _position,
         uint64 _duration,
         Status _status,
         string memory _title,
