@@ -5,6 +5,7 @@ import "./base/AgreementDeliverableManager.sol";
 import "./base/AgreementOfferManager.sol";
 import "./base/AgreementFundsManager.sol";
 import "./base/AgreementSigningManager.sol";
+import "./access/Ownable.sol";
 
 // @title Executable Agreement is an smart contract implementation of legal agreement.
 // @author Nartey Kodjo-Sarso - <narteysarso@gmail.com>
@@ -12,7 +13,8 @@ contract ExecutableAgreement is
     AgreementFundsManager,
     AgreementOfferManager,
     AgreementDeliverableManager,
-    AgreementSigningManager
+    AgreementSigningManager,
+    Ownable
 {
 
     struct AgreementData {
@@ -39,31 +41,36 @@ contract ExecutableAgreement is
     function createAgreement(
         AgreementData memory data
     ) public {
+        require(owner() == address(0), "EC400");
 
         require(msg.sender != address(0), "EC500");
 
         contractTokenURI = data.contractTokenURI;
 
-        {
-            setupOffer(
-                data.offerType,
-                data.position,
-                data.duration,
-                data.description,
-                data.location
-            );
+        setupOffer(
+            data.offerType,
+            data.position,
+            data.duration,
+            data.description,
+            data.location
+        );
 
-            setupDeliverables(data.deliverables, data.executors, data.validators);
+        setupDeliverables(data.deliverables, data.executors, data.validators);
 
-        }
+        setupContractFund(data.contractSum, data.targetToken, HOST);
 
-        {
-            setupContractFund(data.contractSum, data.targetToken, HOST);
+        setupAgreementSigning(data.name, data.symbol, data.signers);
 
-            setupAgreementSigning(data.name, data.symbol, data.signers);
-        }
+        setupOwnable();
+
 
     }
+
+
+    /**
+    * TODO:
+    * withdraw funds
+    */
 }
 
 //---------------------------Second Part -------------------------------------------

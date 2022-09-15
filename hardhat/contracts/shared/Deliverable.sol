@@ -8,5 +8,4 @@ struct Deliverable {
     string title;
     string description;
     address receiver;
-    
 }

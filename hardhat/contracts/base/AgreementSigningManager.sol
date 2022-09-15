@@ -7,10 +7,10 @@ contract AgreementSigningManager is ERC721 {
 
     uint tokenCount;
 
-    string tokenUri;
-
     address internal constant SENTINEL_SIGNER = address(0x2);
     address internal constant SENTINEL_SIGNATURE = address(0x3);
+
+    string tokenUri;
 
     mapping(address => address) signers;
 
@@ -19,6 +19,7 @@ contract AgreementSigningManager is ERC721 {
     event AgreementSigned(address indexed proxy, address signer, uint tokenId);
 
     function setupAgreementSigning (string memory _name, string memory _symbol, address[] memory _signers ) internal {
+       
         setupToken(_name,_symbol);
 
         for(uint i = 0; i < _signers.length; i++){
@@ -33,7 +34,7 @@ contract AgreementSigningManager is ERC721 {
         require(!hasSigned(msg.sender), "AS406");
 
         tokenCount++;
-        _mint(msg.sender, tokenCount);
+        _safeMint(msg.sender, tokenCount);
 
         if(signatures[SENTINEL_SIGNATURE] == address(0)){
             signatures[msg.sender] = SENTINEL_SIGNATURE;

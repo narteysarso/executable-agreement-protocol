@@ -102,7 +102,7 @@ contract AgreementDeliverableManager is AgreementDeliverableExecuteManager {
         deliverablesCount += 1;
     }
 
-    function addValidator(Validator memory _validator) public {
+    function addValidator(Validator memory _validator) internal {
         _addValidator( _validator);
 
         emit ValidatorAdded(address(this), _validator.deliverable, _validator._address);
@@ -145,7 +145,7 @@ contract AgreementDeliverableManager is AgreementDeliverableExecuteManager {
         uint16 _deliverableIndex,
         address _validator,
         address _prevValidator
-    ) public {
+    ) internal {
         // Check if deliverable exists
         require(deliverableExists(_deliverableIndex), "EC404");
 
