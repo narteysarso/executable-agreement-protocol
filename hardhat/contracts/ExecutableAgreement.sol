@@ -19,16 +19,17 @@ contract ExecutableAgreement is
 
     struct AgreementData {
         OfferType offerType;
-        string position;
         uint64 duration;
         uint contractSum;
         address targetToken;
+        address issuer;
+        address assenter;
+        string position;
         string contractTokenURI;
         string name;
         string symbol;
         string description;
         string location;
-        address[] signers;
         Deliverable[] deliverables;
         Executor[] executors;
         Validator[] validators;
@@ -59,7 +60,7 @@ contract ExecutableAgreement is
 
         setupContractFund(data.contractSum, data.targetToken, HOST);
 
-        setupAgreementSigning(data.name, data.symbol, data.signers);
+        setupAgreementSigning(data.name, data.symbol, data.issuer, data.assenter);
 
         setupOwnable();
 
