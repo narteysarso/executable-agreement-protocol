@@ -2,6 +2,7 @@
 pragma solidity 0.8.14;
 
 import "./AgreementDeliverableExecuteManager.sol";
+import "../shared/Validator.sol";
 
 // @title Agreement Deliverable Manager handles create, update, validators and validate actions on deliverables
 // @author Nartey Kodjo-Sarso - <narteysarso@gmail.com>
@@ -9,11 +10,6 @@ contract AgreementDeliverableManager is AgreementDeliverableExecuteManager {
     enum ValidatorVote {
         NO,
         YES
-    }
-
-    struct Validator {
-        uint16 deliverable;
-        address _address;
     }
 
     address internal constant SENTINEL_VALIDATORS = address(0x1);
@@ -40,10 +36,10 @@ contract AgreementDeliverableManager is AgreementDeliverableExecuteManager {
     // Mapping to keep track of the number of `validators` for each `deliverable`
     mapping(uint16 => uint16) public validatorsCount;
 
-    event DeliverableSetup(uint numOfDeliverables, Deliverable[] deliverables);
-    event DeliverableAdded(uint16 deliverableIndex, address user);
-    event DeliverableRemoved(uint16 deliverableIndex, address user);
-    event DeliverableValidated(uint16 deliverableIndex, uint16 validatorIndex);
+    event DeliverableSetup(address indexed proxy, uint numOfDeliverables, Deliverable[] deliverables);
+    event DeliverableAdded(address indexed proxy, uint16 deliverableIndex, address user);
+    event DeliverableRemoved(address indexed proxy, uint16 deliverableIndex, address user);
+    event DeliverableValidated(address indexed proxy, uint16 deliverableIndex, uint16 validatorIndex);
     event ValidatorAdded(
         address indexed proxy,
         uint16 deliverableIndex,
@@ -80,12 +76,12 @@ contract AgreementDeliverableManager is AgreementDeliverableExecuteManager {
             _addValidator(_validators[i]);
         }
 
-        emit DeliverableSetup(_deliverables.length, _deliverables);
+        emit DeliverableSetup(address(this),_deliverables.length, _deliverables);
     }
 
     function addDeliverable(Deliverable memory _deliverable) public {
         _addDeliverable(_deliverable);
-        emit DeliverableAdded(deliverablesCount, msg.sender);
+        emit DeliverableAdded(address(this),deliverablesCount, msg.sender);
 
         deliverablesCount += 1;
     }
@@ -205,6 +201,7 @@ contract AgreementDeliverableManager is AgreementDeliverableExecuteManager {
             // TODO: Initiate timelock of 10 mins
             _execute(_deliverableIndex, deliverables[_deliverableIndex]);
             emit DeliverableValidated(
+                address(this),
                 _deliverableIndex,
                 validateCounts[_deliverableIndex]
             );

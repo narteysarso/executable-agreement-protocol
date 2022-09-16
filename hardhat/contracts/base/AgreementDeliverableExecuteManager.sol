@@ -2,16 +2,13 @@
 pragma solidity 0.8.14;
 
 import "../shared/Deliverable.sol";
+import "../shared/Executor.sol";
 import "../interface/IExecuteManager.sol";
 
 // @title Agreement Deliverable Execute Manager handles commands that are to be executed when deliverable is fully validated
 // @author Nartey Kodjo-Sarso - <narteysaros@gmail.com>
 contract AgreementDeliverableExecuteManager {
-    struct Executor {
-        uint16 deliverable;
-        uint timeLock;
-        address _address;
-    }
+    
 
     /// @dev tracks the contract to call for each deliverable
     mapping(uint => Executor) executors;

@@ -2,88 +2,115 @@
 pragma solidity 0.8.14;
 
 import "./base/AgreementDeliverableManager.sol";
-import "./base/AgreementOfferManager.sol";
-import "./base/AgreementFundsManager.sol";
-import "./base/AgreementSigningManager.sol";
-import "./access/Ownable.sol";
+import "./module/AgreementSigningManager.sol";
+import "./module/AgreementOfferManager.sol";
+import "./module/AgreementFundsManager.sol";
+import "./LogContract.sol";
+
+import "./shared/AgreementData.sol";
+
 
 // @title Executable Agreement is an smart contract implementation of legal agreement.
 // @author Nartey Kodjo-Sarso - <narteysarso@gmail.com>
 contract ExecutableAgreement is
-    AgreementFundsManager,
-    AgreementOfferManager,
-    AgreementDeliverableManager,
-    AgreementSigningManager,
-    Ownable
-{
-
-    struct AgreementData {
-        OfferType offerType;
-        uint64 duration;
-        uint contractSum;
-        address targetToken;
-        address issuer;
-        address assenter;
-        string position;
-        string contractTokenURI;
-        string name;
-        string symbol;
-        string description;
-        string location;
-        Deliverable[] deliverables;
-        Executor[] executors;
-        Validator[] validators;
-    }
+    AgreementDeliverableManager
+    {
 
     address public constant HOST = 0x22ff293e14F1EC3A09B137e9e06084AFd63adDF9;
 
+    address public signingManager;
+
     string public contractTokenURI;
+
+    address public owner;
+
+    AgreementSigningManager public agreementSigningManager;
+
+    AgreementOfferManager public agreementOfferManager;
+    
+    AgreementFundsManager public agreementFundsManager;
+
+    LogContract public logger;
 
     function createAgreement(
         AgreementData memory data
     ) public {
-        require(owner() == address(0), "EC400");
+        require(owner == address(0), "EC400");
 
         require(msg.sender != address(0), "EC500");
 
         contractTokenURI = data.contractTokenURI;
 
-        setupOffer(
-            data.offerType,
-            data.position,
-            data.duration,
-            data.description,
-            data.location
-        );
+        owner = msg.sender;
 
-        setupDeliverables(data.deliverables, data.executors, data.validators);
+        agreementSigningManager.setupAgreementSigning(data.name, data.symbol, data.issuer, data.assenter);
+        agreementOfferManager.setupOffer(data.offerType, data.position, data.duration, data.name, data.location);
+        agreementFundsManager.setupContractFund(data.contractSum, data.targetToken);
 
-        setupContractFund(data.contractSum, data.targetToken, HOST);
-
-        setupAgreementSigning(data.name, data.symbol, data.issuer, data.assenter);
-
-        setupOwnable();
-
-
+        logger.LogAgreementCreated(address(this), data);
     }
 
+    function signAgreement() external{
+        agreementSigningManager.signAgreement();
+        //TODO: emit event
+    }
+
+    function hasSigned(address _signer) public view returns(bool){
+        return agreementSigningManager.hasSigned(_signer);
+    }
+
+    function isSigner(address _signer) public view returns(bool){
+        return agreementSigningManager.isSigner(_signer);
+    }
+
+    function initialize(address _signingManager, address _offerManager, address _fundsManager, address _logger) external {
+        require(owner == address(0), "EC400");
+        require(_signingManager != address(0) && _offerManager != address(0) && _fundsManager != address(0), "EC406");
+
+        agreementSigningManager = AgreementSigningManager(_signingManager);
+        agreementOfferManager = AgreementOfferManager(_offerManager);
+        agreementFundsManager = AgreementFundsManager(_fundsManager);
+        logger = LogContract(_logger);
+
+        //TODO: emit event
+    }
+
+    function duration() public view returns (uint) {
+        return agreementOfferManager.duration();
+    }
+    function position() public view returns (string memory) {
+        return agreementOfferManager.position();
+    }
+    function title() public view returns (string memory)
+    {
+        return agreementOfferManager.title();
+    }
+    function location() public view returns (string memory) {
+        return agreementOfferManager.location();
+    }
+
+    function symbol() public view returns (string memory){
+        return agreementSigningManager.symbol();
+    }
+    
+    function name() public view returns (string memory){
+        return agreementSigningManager.symbol();
+    }
+
+    function contratSum() public view returns (uint){
+        return agreementFundsManager.contractSum();
+    }
+    
+    function balance() public view returns (uint){
+        return agreementFundsManager.balance();
+    }
+    
+    function targetToken() public view returns (address){
+        return agreementFundsManager.targetToken();
+    }
 
     /**
     * TODO:
     * withdraw funds
     */
-}
-
-//---------------------------Second Part -------------------------------------------
-// @title Arbiter specifies and handle staking and arbitration, and realese of stake
-//        in cases of:
-//        - Agreement termination by any party
-//        - Agreement expiration without contract completion:
-//              - any party failed to deliver on promise
-//              - all party fulfilled their promise
-//              - unforseen natural disasters, events beyond control of any party
-//              - declared liabilities, vulnerabilities, risks, and limitations.
-//
-contract Arbiter {
-
 }

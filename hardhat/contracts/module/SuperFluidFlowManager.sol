@@ -38,6 +38,8 @@ contract SuperFluidFlowManager {
     );
 
     function initialize(address _host, address _owner) external {
+        require(owner == address(0), "SP400");
+        
         assert(_host != address(0));
         owner = _owner;
 
