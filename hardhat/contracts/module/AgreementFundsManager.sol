@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.14;
+import {ISuperToken} from "@superfluid-finance/ethereum-contracts/contracts/interfaces/superfluid/ISuperfluid.sol";
 
 import "./SuperFluidFlowManager.sol";
 import "../interface/IExecuteManager.sol";
@@ -18,7 +19,7 @@ contract AgreementFundsManager is IExecuteManager{
 
     event FundMangerSet(uint256 contractSum, address targetToken);
 
-    event Payments(uint indexed index, uint amount, address indexed targetToken, uint duration);
+    event PaymentsMade(address manager, address flow,  uint amount, address indexed targetToken, uint duration);
 
     function setupContractFund(uint _contractSum, address _targetToken)
         external 
@@ -27,6 +28,7 @@ contract AgreementFundsManager is IExecuteManager{
 
         contractSum = _contractSum;
         targetToken = _targetToken;
+        balance = _contractSum;
 
         owner = msg.sender;
 
@@ -40,7 +42,7 @@ contract AgreementFundsManager is IExecuteManager{
 
         superFluidFlowManager = SuperFluidFlowManager(_superFluidFlowManager);
 
-        // superFluidFlowManager.initialize(_superfluidChainHost, address(this));
+        superFluidFlowManager.initialize(_superfluidChainHost, address(this));
 
     }
 
@@ -68,11 +70,20 @@ contract AgreementFundsManager is IExecuteManager{
     function makePayment(uint _index, address _receiver, uint _amount, uint _duration ) internal {
         require(balance >= _amount, "CFM400");
 
+        balance -= _amount;
+
+        ISuperToken token = ISuperToken(targetToken);
+
+        token.approve(address(superFluidFlowManager), _amount);
+
         superFluidFlowManager.sendLumpSumToContract(targetToken, _amount);
 
         (bool success, ) = superFluidFlowManager.createDeliverableFlow(targetToken, _receiver, _amount, _duration);
 
         require(success, "CFM500");
+
+        emit PaymentsMade(address(this), address(superFluidFlowManager),  _amount,  targetToken, _duration);
+
     }
 
     

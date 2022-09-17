@@ -4,8 +4,6 @@ pragma solidity 0.8.14;
 import "./base/AgreementDeliverableManager.sol";
 import "./module/AgreementSigningManager.sol";
 import "./module/AgreementOfferManager.sol";
-import "./module/AgreementFundsManager.sol";
-import "./LogContract.sol";
 
 import "./shared/AgreementData.sol";
 
@@ -16,10 +14,6 @@ contract ExecutableAgreement is
     AgreementDeliverableManager
     {
 
-    address public constant HOST = 0x22ff293e14F1EC3A09B137e9e06084AFd63adDF9;
-
-    address public signingManager;
-
     string public contractTokenURI;
 
     address public owner;
@@ -27,10 +21,6 @@ contract ExecutableAgreement is
     AgreementSigningManager public agreementSigningManager;
 
     AgreementOfferManager public agreementOfferManager;
-    
-    AgreementFundsManager public agreementFundsManager;
-
-    LogContract public logger;
 
     function createAgreement(
         AgreementData memory data
@@ -42,6 +32,11 @@ contract ExecutableAgreement is
         contractTokenURI = data.contractTokenURI;
 
         owner = msg.sender;
+
+
+        _setupDeliverables(data.deliverables);
+        _setupExecutors(data.executors);
+        _setupValidators(data.validators);
 
         agreementSigningManager.setupAgreementSigning(data.name, data.symbol, data.issuer, data.assenter);
         agreementOfferManager.setupOffer(data.offerType, data.position, data.duration, data.name, data.location);

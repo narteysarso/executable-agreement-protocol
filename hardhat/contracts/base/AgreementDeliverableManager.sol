@@ -3,20 +3,20 @@ pragma solidity 0.8.14;
 
 import "./AgreementDeliverableExecuteManager.sol";
 import "../shared/Validator.sol";
+import "../LogContract.sol";
 
 // @title Agreement Deliverable Manager handles create, update, validators and validate actions on deliverables
 // @author Nartey Kodjo-Sarso - <narteysarso@gmail.com>
 contract AgreementDeliverableManager is AgreementDeliverableExecuteManager {
-    enum ValidatorVote {
-        NO,
-        YES
-    }
 
     address internal constant SENTINEL_VALIDATORS = address(0x1);
 
     uint16 constant MINIMUM_NUM_VERIFIERS = 1;
     uint16 index;
     uint16 deliverablesCount;
+
+    // @dev contract for logging events
+     LogContract public logger;
 
     // Mappint to keep track of all deliverables added to the contract
     mapping(uint16 => Deliverable) public deliverables;
@@ -59,31 +59,27 @@ contract AgreementDeliverableManager is AgreementDeliverableExecuteManager {
 
     // modifiers;
 
-    function setupDeliverables(
-        Deliverable[] memory _deliverables,
-        Executor[] memory _executors,
-        Validator[] memory _validators
+    function _setupDeliverables(
+        Deliverable[] memory _deliverables
+        
     ) internal {
         for (uint i = 0; i < _deliverables.length; i++) {
             _addDeliverable(_deliverables[i]);
         }
 
-        for (uint i = 0; i < _executors.length; i++) {
+        // emit DeliverableSetup(address(this),_deliverables.length, _deliverables);
+    }
+
+    function _setupExecutors(Executor[] memory _executors) internal {
+         for (uint i = 0; i < _executors.length; i++) {
             _addExecutor(_executors[i]);
         }
-        
+    }
+
+    function _setupValidators(Validator[] memory _validators) internal {
         for (uint i = 0; i < _validators.length; i++) {
             _addValidator(_validators[i]);
         }
-
-        emit DeliverableSetup(address(this),_deliverables.length, _deliverables);
-    }
-
-    function addDeliverable(Deliverable memory _deliverable) public {
-        _addDeliverable(_deliverable);
-        emit DeliverableAdded(address(this),deliverablesCount, msg.sender);
-
-        deliverablesCount += 1;
     }
 
     function _addDeliverable(Deliverable memory _deliverable) internal {
@@ -96,12 +92,6 @@ contract AgreementDeliverableManager is AgreementDeliverableExecuteManager {
         deliverable.receiver = _deliverable.receiver;
 
         deliverablesCount += 1;
-    }
-
-    function addValidator(Validator memory _validator) internal {
-        _addValidator( _validator);
-
-        emit ValidatorAdded(address(this), _validator.deliverable, _validator._address);
     }
 
     function _addValidator(Validator memory _validator)
@@ -137,43 +127,6 @@ contract AgreementDeliverableManager is AgreementDeliverableExecuteManager {
         validatorsCount[_validator.deliverable] += 1;
     }
 
-    function removeValidator(
-        uint16 _deliverableIndex,
-        address _validator,
-        address _prevValidator
-    ) internal {
-        // Check if deliverable exists
-        require(deliverableExists(_deliverableIndex), "EC404");
-
-        // Validator address cannot be null, this contract, or the sentinel
-        require(
-            _validator != address(0) &&
-                _validator != address(this) &&
-                _validator != SENTINEL_VALIDATORS,
-            "EC400"
-        );
-
-        require(
-            validators[_deliverableIndex][_prevValidator] == _validator,
-            "EC404"
-        );
-
-        validators[_deliverableIndex][_prevValidator] = validators[
-            _deliverableIndex
-        ][_validator];
-        validators[_deliverableIndex][_validator] = address(0);
-
-        validatorsCount[_deliverableIndex] -= 1;
-
-        if (
-            validatorVotes[_deliverableIndex][_validator] == ValidatorVote.YES
-        ) {
-            delete validatorVotes[_deliverableIndex][_validator];
-            validateCounts[_deliverableIndex] -= 1;
-        }
-
-        emit ValidatorRemoved(address(this), _deliverableIndex, _validator);
-    }
 
     function vote(uint16 _deliverableIndex, ValidatorVote _vote)
         public
@@ -198,7 +151,7 @@ contract AgreementDeliverableManager is AgreementDeliverableExecuteManager {
             validateCounts[_deliverableIndex] >=
             deliverables[_deliverableIndex].validatorThreshold
         ) {
-            // TODO: Initiate timelock of 10 mins
+            
             _execute(_deliverableIndex, deliverables[_deliverableIndex]);
             emit DeliverableValidated(
                 address(this),

@@ -51,15 +51,5 @@ contract AgreementOfferManager {
         title = _title;
         location = _location;
         offerType = _offerType;
-
-        // emit OfferCreated(
-        //     address(this),
-        //     _position,
-        //     _duration,
-        //     status,
-        //     _title,
-        //     _location,
-        //     _offerType
-        // );
     }
 }

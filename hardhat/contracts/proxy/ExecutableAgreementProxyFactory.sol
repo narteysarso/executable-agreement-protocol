@@ -4,11 +4,8 @@ pragma solidity 0.8.14;
 
 import "./Proxy.sol";
 
-// mastercopy 0xd9145CCE52D386f254917e481eB44e9943F39138
-// signercopy 0xf8e81D47203A594245E36C48e151709F0C19fBe8
-// host 0xEB796bdb90fFA0f28255275e16936D25d3418603
-contract ExecutableAgreementProxyFactory {
-    event ExecutableProxyCreated(address proxy, address mastercopy, address creator);
+contract ExecutableAgreementProxyFactory{
+    event ExecutableProxyCreated(address proxy, address creator);
 
     function createExecutableAgreement(address _mastercopy, address _signerManagerCopy, address _offerManagerCopy, address _fundsManagerCopy, address _superFluidFlowManager, address _superfluidChainHost, address _logger) public returns(address) {
         require(_mastercopy != address(0), "Invalid mastercopy address");
@@ -21,14 +18,16 @@ contract ExecutableAgreementProxyFactory {
         
         Proxy fundsProxy = new Proxy(_fundsManagerCopy);
 
-        (bool fundssuccess, ) = address(fundsProxy).call( abi.encodeWithSignature("initialize(address,address)", _superFluidFlowManager, _superfluidChainHost) );
+        Proxy superFluidFlowManagerProxy = new Proxy(_superFluidFlowManager);
+
+        (bool fundssuccess, ) = address(fundsProxy).call( abi.encodeWithSignature("initialize(address,address)", address(superFluidFlowManagerProxy), _superfluidChainHost) );
 
         require(fundssuccess, "Failed to initialize funds proxy");
 
-        (bool success, ) = address(proxy).call( abi.encodeWithSignature("initialize(address,address,address,address)", address(signerProxy), address(offerProxy), address(_fundsManagerCopy), _logger) );
+        (bool success, ) = address(proxy).call( abi.encodeWithSignature("initialize(address,address,address,address)", address(signerProxy), address(offerProxy), address(fundsProxy), _logger) );
         require(success, "Failed to create agreement proxy");
         
-        emit ExecutableProxyCreated(address(proxy), _mastercopy, msg.sender);
+        emit ExecutableProxyCreated(address(proxy), msg.sender);
 
         return (address(proxy));
     }
