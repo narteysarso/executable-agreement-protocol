@@ -39,7 +39,7 @@ contract ExecutableAgreement is
         _setupValidators(data.validators);
 
         agreementSigningManager.setupAgreementSigning(data.name, data.symbol, data.issuer, data.assenter);
-        agreementOfferManager.setupOffer(data.offerType, data.position, data.duration, data.name, data.location);
+        agreementOfferManager.setupOffer(data.offerType, data.position, data.duration, data.title, data.location);
         agreementFundsManager.setupContractFund(data.contractSum, data.targetToken);
 
         logger.LogAgreementCreated(address(this), data);

@@ -16,6 +16,7 @@ struct AgreementData {
     address assenter;
     string position;
     string contractTokenURI;
+    string title;
     string name;
     string symbol;
     string description;
