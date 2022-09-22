@@ -22,6 +22,26 @@ ABIs can be found at in hardat/abis
         Validator[] validators;
     }
     
+    struct Deliverable {
+        uint16 validatorThreshold;
+        uint24 totalSeconds;
+        uint payoutAmount;
+        string title;
+        string description;
+        address receiver;
+    }
+    
+    struct Executor {
+        uint16 deliverable;
+        uint timeLock;
+        address _address;
+    }
+    
+    struct Validator {
+        uint16 deliverable;
+        address _address;
+    }
+    
     
  
 
