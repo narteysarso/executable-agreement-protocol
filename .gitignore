@@ -3,4 +3,6 @@ sismo-hub/
 super-examples/
 superfluid/
 remix-executable-agreement/
+tello/
+frontend/
 *.env
