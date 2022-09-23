@@ -1,0 +1,356 @@
+[
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "proxy",
+                "type": "address"
+            },
+            {
+                "components": [
+                    {
+                        "internalType": "enum OfferType",
+                        "name": "offerType",
+                        "type": "uint8"
+                    },
+                    {
+                        "internalType": "uint64",
+                        "name": "duration",
+                        "type": "uint64"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "contractSum",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "address",
+                        "name": "targetToken",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "address",
+                        "name": "issuer",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "address",
+                        "name": "assenter",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "position",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "contractTokenURI",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "name",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "title",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "symbol",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "description",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "location",
+                        "type": "string"
+                    }
+                ],
+                "indexed": false,
+                "internalType": "struct LogContract.LogAgreementData",
+                "name": "agreementData",
+                "type": "tuple"
+            }
+        ],
+        "name": "AgreementCreated",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "proxy",
+                "type": "address"
+            },
+            {
+                "indexed": true,
+                "internalType": "uint256",
+                "name": "deliverableIndex",
+                "type": "uint256"
+            },
+            {
+                "indexed": true,
+                "internalType": "uint256",
+                "name": "_executorIndex",
+                "type": "uint256"
+            }
+        ],
+        "name": "DeliverableCompleted",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "proxy",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint16",
+                "name": "deliverableIndex",
+                "type": "uint16"
+            },
+            {
+                "indexed": false,
+                "internalType": "address",
+                "name": "validator",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "internalType": "enum ValidatorVote",
+                "name": "validatorVote",
+                "type": "uint8"
+            }
+        ],
+        "name": "ValidatorVoted",
+        "type": "event"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_proxy",
+                "type": "address"
+            },
+            {
+                "components": [
+                    {
+                        "internalType": "enum OfferType",
+                        "name": "offerType",
+                        "type": "uint8"
+                    },
+                    {
+                        "internalType": "uint64",
+                        "name": "duration",
+                        "type": "uint64"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "contractSum",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "address",
+                        "name": "targetToken",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "address",
+                        "name": "issuer",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "address",
+                        "name": "assenter",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "position",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "contractTokenURI",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "name",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "title",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "symbol",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "description",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "location",
+                        "type": "string"
+                    },
+                    {
+                        "components": [
+                            {
+                                "internalType": "uint16",
+                                "name": "validatorThreshold",
+                                "type": "uint16"
+                            },
+                            {
+                                "internalType": "uint24",
+                                "name": "totalSeconds",
+                                "type": "uint24"
+                            },
+                            {
+                                "internalType": "uint256",
+                                "name": "payoutAmount",
+                                "type": "uint256"
+                            },
+                            {
+                                "internalType": "string",
+                                "name": "title",
+                                "type": "string"
+                            },
+                            {
+                                "internalType": "string",
+                                "name": "description",
+                                "type": "string"
+                            },
+                            {
+                                "internalType": "address",
+                                "name": "receiver",
+                                "type": "address"
+                            }
+                        ],
+                        "internalType": "struct Deliverable[]",
+                        "name": "deliverables",
+                        "type": "tuple[]"
+                    },
+                    {
+                        "components": [
+                            {
+                                "internalType": "uint16",
+                                "name": "deliverable",
+                                "type": "uint16"
+                            },
+                            {
+                                "internalType": "uint256",
+                                "name": "timeLock",
+                                "type": "uint256"
+                            },
+                            {
+                                "internalType": "address",
+                                "name": "_address",
+                                "type": "address"
+                            }
+                        ],
+                        "internalType": "struct Executor[]",
+                        "name": "executors",
+                        "type": "tuple[]"
+                    },
+                    {
+                        "components": [
+                            {
+                                "internalType": "uint16",
+                                "name": "deliverable",
+                                "type": "uint16"
+                            },
+                            {
+                                "internalType": "address",
+                                "name": "_address",
+                                "type": "address"
+                            }
+                        ],
+                        "internalType": "struct Validator[]",
+                        "name": "validators",
+                        "type": "tuple[]"
+                    }
+                ],
+                "internalType": "struct AgreementData",
+                "name": "_agreementData",
+                "type": "tuple"
+            }
+        ],
+        "name": "LogAgreementCreated",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "proxy",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_deliverableIndex",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_executableIndex",
+                "type": "uint256"
+            }
+        ],
+        "name": "LogDeliverableCompleted",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_proxy",
+                "type": "address"
+            },
+            {
+                "internalType": "uint16",
+                "name": "_deliverableIndex",
+                "type": "uint16"
+            },
+            {
+                "internalType": "address",
+                "name": "_validator",
+                "type": "address"
+            },
+            {
+                "internalType": "enum ValidatorVote",
+                "name": "_validatorVote",
+                "type": "uint8"
+            }
+        ],
+        "name": "LogValidatorVoted",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    }
+]
