@@ -3,7 +3,7 @@ pragma solidity 0.8.14;
 
 import "./AgreementDeliverableExecuteManager.sol";
 import "../shared/Validator.sol";
-import "../LogContract.sol";
+
 
 // @title Agreement Deliverable Manager handles create, update, validators and validate actions on deliverables
 // @author Nartey Kodjo-Sarso - <narteysarso@gmail.com>
@@ -14,9 +14,6 @@ contract AgreementDeliverableManager is AgreementDeliverableExecuteManager {
     uint16 constant MINIMUM_NUM_VERIFIERS = 1;
     uint16 index;
     uint16 deliverablesCount;
-
-    // @dev contract for logging events
-     LogContract public logger;
 
     // Mappint to keep track of all deliverables added to the contract
     mapping(uint16 => Deliverable) public deliverables;
@@ -144,7 +141,7 @@ contract AgreementDeliverableManager is AgreementDeliverableExecuteManager {
             validateCounts[_deliverableIndex] += 1;
         }
 
-        emit ValidatorVoted(address(this), _deliverableIndex, msg.sender, _vote);
+        logger.LogValidatorVoted(address(this), _deliverableIndex, msg.sender, _vote);
 
         // If number of validators is equal to (or more than) validator threshold.
         if (

@@ -7,11 +7,18 @@ import "./shared/Validator.sol";
 contract LogContract {
 
     event AgreementCreated(address indexed proxy , AgreementData agreementData);
+    
     event ValidatorVoted(
         address indexed proxy,
         uint16 deliverableIndex,
         address validator,
         ValidatorVote validatorVote
+    );
+
+    event DeliverableCompleted(
+        address indexed proxy,
+        uint indexed deliverableIndex,
+        uint indexed _executorIndex
     );
 
     function LogAgreementCreated(address _proxy, AgreementData memory _agreementData) external {
@@ -23,5 +30,13 @@ contract LogContract {
         ValidatorVote _validatorVote) external {
             emit ValidatorVoted(_proxy, _deliverableIndex, _validator, _validatorVote);
         }
+
+    function LogDeliverableCompleted(
+            address proxy,
+            uint _deliverableIndex,
+            uint _executableIndex
+        ) external {
+            emit DeliverableCompleted(proxy,_deliverableIndex,_executableIndex);
+    }
 
 }

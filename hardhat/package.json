@@ -1,6 +1,7 @@
 {
   "name": "hardhat-project",
   "dependencies": {
+    "@graphprotocol/graph-cli": "^0.33.1",
     "@openzeppelin/contracts": "^4.7.3"
   },
   "devDependencies": {

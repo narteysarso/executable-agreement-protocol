@@ -14,6 +14,9 @@ contract AgreementDeliverableExecuteManager {
     /// @dev tracks funds manager contract
     AgreementFundsManager public agreementFundsManager;
 
+    // @dev contract for logging events
+    LogContract public logger;
+
     /// @dev tracks the contract to call for each deliverable
     mapping(uint => Executor) public executors;
 
@@ -86,7 +89,7 @@ contract AgreementDeliverableExecuteManager {
 
         require(success, "DE500");
 
-        emit DeliverableCompleted(
+        logger.LogDeliverableCompleted(
             address(this),
             _executableIndex,
             _executableIndex
