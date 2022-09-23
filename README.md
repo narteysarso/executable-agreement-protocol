@@ -14,6 +14,7 @@ ABIs can be found at in hardat/abis
         string position;
         string contractTokenURI;
         string name;
+        string title;
         string symbol;
         string description;
         string location;
