@@ -54,13 +54,13 @@ ABIs can be found at in hardat/abis
 
 ### Proxy Address
 - Proxy Factory: 0xBe2c3e6eb679982ccc0D8091dD71B377b9Dd7a24
-- executableAgreementcopy: 0x6566A22C69316C7042463d08Cd75fEdA3a22740c
-- signerManagerCopy: 0x578dA38A04da852B37181E0229e374B93BD84af4
-- offerManagerCopy: 0x0431Dc69236AEB98aA8Efae4d9a78AD0589f50C0
-- fundsManagerCopy: 0x633eB9F0f34F1CE56450b32ACC27E9CA32436447
-- superFluidFlowManager: 0x8d7301c1c085f49A3325155bBa9010bc74361E0A
+- executableAgreementcopy: 0xeF2e8559D142E4810d0C51618d80c3c4F77f57Cf
+- signerManagerCopy: 0xd4756E5003ce5A2Cdd9f04AFAC0412d2a0d53939
+- offerManagerCopy: 0xB5Ac343d6D3a94974e6E139006aFef6a01A23A1f
+- fundsManagerCopy: 0x431aB0bF07B39938508F5384Ad24b662E264c40c
+- superFluidFlowManager: 0xbC92EafCf04f115b686fb8d69a33317287667a10
 - superfluidChainHost: 0xEB796bdb90fFA0f28255275e16936D25d3418603
-- logger: 0x5fa8cCEFd3E2e46Ca0D066AC424D3474F73BcA5C
+- logger: 0x45E523084eA6Cff44e4BABe94261f4D782a83540
 
 creating and funding an agreement steps:
 1. Get proxy factory contract 
