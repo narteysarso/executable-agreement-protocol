@@ -1,0 +1,73 @@
+{
+    "address": "0xBe2c3e6eb679982ccc0D8091dD71B377b9Dd7a24",
+    "abi": [
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "internalType": "address",
+                "name": "proxy",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "internalType": "address",
+                "name": "creator",
+                "type": "address"
+            }
+        ],
+        "name": "ExecutableProxyCreated",
+        "type": "event"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_mastercopy",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "_signerManagerCopy",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "_offerManagerCopy",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "_fundsManagerCopy",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "_superFluidFlowManager",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "_superfluidChainHost",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "_logger",
+                "type": "address"
+            }
+        ],
+        "name": "createExecutableAgreement",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    }
+]
+}
