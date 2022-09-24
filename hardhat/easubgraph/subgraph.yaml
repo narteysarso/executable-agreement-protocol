@@ -1,0 +1,33 @@
+specVersion: 0.0.4
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: LogContract
+    network: mumbai
+    source:
+      address: "0x38D76d64B183b7415bfEF18A84a0E76d1A93AB7E"
+      abi: LogContract
+      startBlock: 28250744
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - AgreementCreated
+        - DeliverableCompleted
+        - ValidatorCreated
+        - ValidatorVoted
+      abis:
+        - name: LogContract
+          file: ./abis/LogContract.json
+      eventHandlers:
+        - event: AgreementCreated(indexed address,(uint8,uint64,uint256,address,address,address,string,string,string,string,string,string,string))
+          handler: handleAgreementCreated
+        - event: DeliverableCompleted(indexed address,indexed uint256,indexed uint256)
+          handler: handleDeliverableCompleted
+        - event: ValidatorCreated(indexed address,(uint16,address))
+          handler: handleValidatorCreated
+        - event: ValidatorVoted(indexed address,uint16,address,uint8)
+          handler: handleValidatorVoted
+      file: ./src/log-contract.ts
