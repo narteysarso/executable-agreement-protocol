@@ -40,7 +40,7 @@ export default function Created() {
         loadCreatedAgreements(address)
     }, [address]);
 
-    if (!agreements.length) {
+    if (!agreements || !agreements.length) {
         return <Page404 />
     }
 
