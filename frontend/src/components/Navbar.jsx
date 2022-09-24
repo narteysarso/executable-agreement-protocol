@@ -15,7 +15,7 @@ export default function Navbar() {
                 alignItems: "center",
             }}
         >
-            <h3>Payslice</h3>
+            <h3>Executable Agreement</h3>
 
             <Menu style={{flexGrow: 1, background: "transparent"}} mode="horizontal" >
                 <Menu.Item>

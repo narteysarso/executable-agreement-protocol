@@ -1,6 +1,7 @@
 import { ethers } from "ethers";
 import ExecutableABI from "../abis/ExecutableAgreement.json";
 import SigningManagerABI from "../abis/AgreementSigningManager.json";
+import FundManagerABI from "../abis/AgreementFundManager.json";
 
 export function getProvider() {
     if (!window.ethereum) {
@@ -22,6 +23,10 @@ export function getContract(address, abi) {
 
 export function getExecutableContract(address){
     return getContract(address, ExecutableABI.abi);
+}
+
+export function getFundContract(address){
+    return getContract(address, FundManagerABI.abi);
 }
 
 export function getSigningManagerContract(address){

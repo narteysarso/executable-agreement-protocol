@@ -8,9 +8,9 @@ import Page404 from "../errors/404";
 import { chainId, useAccount } from "wagmi";
 import { TOKEN_SYMBOL } from "../../data/tokens";
 import { OFFERTYPES } from "../../data";
-import { getExecutableContract, getSigningManagerContract, weiToEth } from "../../utils/helpers";
+import { getExecutableContract, getFundContract, getSigningManagerContract,  weiToEth } from "../../utils/helpers";
 
-function SuperFluidList({ issuer, assenter, targetToken }) {
+function SuperFluidList({ issuer, assenter, targetToken, proxy }) {
     const [loading, setLoading] = useState(false);
     const [info, setInfo] = useState([]);
     const [funds, setFunds] = useState([]);
@@ -19,7 +19,12 @@ function SuperFluidList({ issuer, assenter, targetToken }) {
     useEffect(() => {
         (async () => {
             if (!issuer || !assenter) return;
-            const results = await getStreamingDataBTWSenderRecipient(issuer, assenter);
+            const contract = getExecutableContract(proxy);
+            const fundManagerAddress = await contract.agreementFundsManager();
+            const superflowManagerContract = getFundContract(fundManagerAddress);
+            const flowManagerAddress = await superflowManagerContract.superFluidFlowManager();
+            
+            const results = await getStreamingDataBTWSenderRecipient(flowManagerAddress, assenter);
 
             setFunds(results);
         })();
@@ -35,6 +40,7 @@ function SuperFluidList({ issuer, assenter, targetToken }) {
 
         return () => clearInterval(timer)
     }, [funds]);
+
     return (
         <List
             className="demo-loadmore-list"
@@ -52,7 +58,7 @@ function SuperFluidList({ issuer, assenter, targetToken }) {
                             description={
                                 <Row>
                                     <Col span={24}>Flow Rate: {item.flowRate}</Col>
-                                    <Col span={24}>Total steamed: <b>{streamedAmount}</b></Col>
+                                    <Col span={24}>Total steamed: <br /> <b>{streamedAmount}</b></Col>
                                 </Row>
                             }
                         />
@@ -178,7 +184,7 @@ export default function AgreementDetail() {
     // return;
     return (
         <Row gutter={[8, 16]}>
-            <Col flex={2}>
+            <Col span={16}>
                 <div style={{ width: "100%", display: "flex", flexDirection: "row", alignItems: "center", padding: "1vh 2vw", justifyContent: "space-between" }}>
                     <Typography.Title level={3}>Agreement</Typography.Title>
                     <SignAgreement proxyAddress={agreement.proxy} />
@@ -193,7 +199,7 @@ export default function AgreementDetail() {
 ### Deliverables \r\r ${formatDeliverables(agreementContent?.properties.deliverables, agreementContent?.properties.executors, agreementContent?.properties.validators)}`}
                 </ReactMarkdown>
             </Col>
-            <Col flex={1}>
+            <Col span={8}>
                 <SuperFluidList {...agreement} />
             </Col>
         </Row>
