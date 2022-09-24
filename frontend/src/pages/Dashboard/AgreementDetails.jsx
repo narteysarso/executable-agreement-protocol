@@ -161,7 +161,7 @@ export default function AgreementDetail() {
     useEffect(() => {
         (async () => {
             if (!id) return;
-            const results = await getExecutableAgreementsById(id)
+            const results = await getExecutableAgreementsById(id);
 
             //load from IPFS
             const cid = results[0].contractTokenURI?.split("//")[1];

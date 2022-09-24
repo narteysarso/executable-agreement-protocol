@@ -33,7 +33,9 @@ export default function Validations() {
             </div>
         </Col>
         <Col>
-            {validators.map((validtor, idx) => <Col span={{xs: 24, sm: 8, md: 4}} key={idx}> <ValidationCard {...validators} /></Col> )}
+            <Row gutter={[8,16]}>
+            {validators.map((validator, idx) => <Col span={{xs: 24, sm: 8, md: 4}} key={idx}> <ValidationCard {...validator} /></Col> )}
+            </Row>
         </Col>
     </Row>
     )

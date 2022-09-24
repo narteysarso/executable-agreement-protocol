@@ -67,6 +67,7 @@ export const getValidatorsOf = async (address) => {
                 proxy
                 address
                 hasVoted
+                deliverableIndex
                 deliverable{
                     id
                     proxy

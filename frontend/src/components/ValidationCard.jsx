@@ -5,6 +5,8 @@ import { useState } from "react";
 import { getExecutableContract } from "../utils/helpers";
 import { useEffect } from "react";
 import {useAccount} from "wagmi";
+
+
 const ValidateButton = ({deliverableIndex, proxy}) => {
     const [loading, setLoading] = useState(false);
     const [hasVoted, setHasVoted] = useState(false);
@@ -14,8 +16,9 @@ const ValidateButton = ({deliverableIndex, proxy}) => {
         try {
             setLoading(true);
             const contract = getExecutableContract(proxy);
+            console.log(deliverableIndex);
 
-            const txn = await contract.vote(1);
+            const txn = await contract.vote(deliverableIndex, 1);
 
             await txn.wait();
         } catch (error) {
@@ -40,11 +43,11 @@ const ValidateButton = ({deliverableIndex, proxy}) => {
         checkHasVoted(deliverableIndex)
     }, [deliverableIndex]);
     return (
-        <Button disable={hasVoted} loading={loading} onClick={handleValidate}>Validate</Button>
+        <Button disable={hasVoted.toString()} loading={loading} onClick={handleValidate}>Validate</Button>
     )
 }
 
-export default function ValidationCard({ id = "", proxy, deliverableIndex, deliverable = {} }) {
+export default function ValidationCard({ id = "", proxy = "", deliverableIndex, deliverable = {} }) {
     return (
         <Card>
             <Card
