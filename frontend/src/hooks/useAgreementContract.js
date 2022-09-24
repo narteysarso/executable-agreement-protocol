@@ -1,6 +1,6 @@
 import { ethers } from "ethers";
 import { chainId, useAccount } from "wagmi";
-import { message } from "antd";
+import { message, Modal } from "antd";
 
 import useNFTStroage from "./useNftStorage";
 import FactoryABI from "../abis/ExecutableAgreementProxyFactory.json";
@@ -16,12 +16,20 @@ export default function useAgreementContract() {
 
     async function createAgreement(data) {
 
+        const modal = Modal.success({
+            title: 'Please wait...',
+            content: `Preparing agreement`
+          });
+
         const preparedData = prepareAgreementData({ ...data });
 
         const provider = await getProvider();
 
         const token = await superToken(TOKEN_SYMBOL[chainId.polygonMumbai][preparedData.targetToken], chainId.polygonMumbai, provider.getSigner());
 
+        modal.update({
+            content: `Checking asset balance`,
+        });
         //  console.log(address);
         const balance = await token.balanceOf({
             account: address,
@@ -33,7 +41,9 @@ export default function useAgreementContract() {
             return;
         }
 
-        // console.log(preparedData);
+        modal.update({
+            content: `Uploading to NFT.storage`,
+          });
 
         //Create NFT
         const metadata = await store(preparedData);
@@ -41,6 +51,9 @@ export default function useAgreementContract() {
         preparedData.contractTokenURI = metadata.url;
 
 
+        modal.update({
+            content: `Preparing contract`,
+          });
         // create agreement on blockchain
         const proxyFactoryContract = await getContract(FactoryABI.address, FactoryABI.abi);
 
@@ -66,6 +79,9 @@ export default function useAgreementContract() {
         // console.log(agreementInfo);
         const execTxn = await executableAgreementProxy.createAgreement(agreementInfo);
         await execTxn.wait();
+        modal.update({
+            content: `Please approve token transfer`,
+          });
 
         // transfer targetTokens to fundsManager contract
         const fundsManagerAddress = await executableAgreementProxy.agreementFundsManager();
@@ -78,36 +94,10 @@ export default function useAgreementContract() {
             console.log(tx)
         });
 
+        modal.destroy();
     }
 
     function prepareAgreementData({ infoData, clauseData, deliverableData, validatorsData, tokenizationData } = {}) {
-
-        /**
-         * OfferType offerType;
-            uint64 duration;
-            uint contractSum;
-            address targetToken;
-            address issuer;
-            address assenter;
-            string position;
-            string contractTokenURI;
-            string name;
-            string symbol;
-            string description;
-            string location;
-            Deliverable[] deliverables;
-            Executor[] executors;
-            Validator[] validators;
-         */
-
-        /**
-         * uint16 validatorThreshold;
-            uint24 totalSeconds;
-            uint payoutAmount;
-            string title;
-            string description;
-            address receiver;
-         */
 
         const {
             title,

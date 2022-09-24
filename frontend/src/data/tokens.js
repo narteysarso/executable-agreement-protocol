@@ -26,8 +26,8 @@ export const TOKEN_SYMBOL = {
 export const CHAIN_TOKENS = {
     [chain.polygonMumbai.id]: {
         "MATIC": "0x96B82B65ACF7072eFEb00502F45757F254c2a0D4",
-        "DAI": "0x5D8B4C2554aeB7e86F387B4d6c00Ac33499Ed01f",
-        "USDC": "0x42bb40bF79730451B11f6De1CbA222F17b87Afd7"
+        "fDAI": "0x15F0Ca26781C3852f8166eD2ebce5D18265cceb7",
+        "fUSDC": "0xbe49ac1EadAc65dccf204D4Df81d650B50122aB2"
     },
     [chain.polygon.id]: {},
     [chain.mainnet.id]: {}

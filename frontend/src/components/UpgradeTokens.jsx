@@ -1,19 +1,26 @@
-import { Button, Divider, Form, Input, Modal, Select } from "antd";
+import { Button, Divider, Form, Input, message, Modal, Select } from "antd";
 import { ethers } from "ethers";
 import { useState } from "react";
 import { chainId } from "wagmi";
 import { CHAIN_TOKENS, PAYMENT_TOKENS } from "../data/tokens";
-import { getProvider, weiToEth } from "../utils/helpers";
 import { swapForSuperToken } from "../utils/superToken";
 
 function UpgradeTokenForm() {
+    const [loading, setLoading] = useState(false);
     const handleOnFinish = async ({ fromToken, toToken, amount }) => {
-
-        await swapForSuperToken(fromToken, toToken, ethers.utils.parseEther(amount), chainId.polygonMumbai, getProvider().getSigner());
+        try {
+            setLoading(true);
+            await swapForSuperToken(fromToken, toToken, ethers.utils.parseEther(amount), chainId.polygonMumbai);
+            
+        } catch (error) {
+            message.error(error.message);
+        }finally{
+            setLoading(false);
+        }
 
     }
     return (
-        <Form onFinish={handleOnFinish}>
+        <Form onFinish={handleOnFinish} disabled={loading}>
             <Form.Item label="From Token" hasFeedback name={"fromToken"}>
                 <Select size="large" placeholder="Select token used for payment" allowClear>
                     {Object.entries(CHAIN_TOKENS[chainId.polygonMumbai]).map(([k, v], idx) => (<Select.Option key={idx} value={v}>{k}</Select.Option>))}
@@ -34,7 +41,7 @@ function UpgradeTokenForm() {
                     Reset
                 </Button>
                 <Divider type="vertical" />
-                <Button type="primary" htmlType="submit">
+                <Button type="primary" htmlType="submit" loading={loading}>
                     Upgrade
                 </Button>
             </Form.Item>

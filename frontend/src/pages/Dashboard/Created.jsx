@@ -58,7 +58,9 @@ export default function Created() {
                 </div>
             </Col>
             <Col>
-                {agreements.map((agreement, idx) => <Col span={{ xs: 24, sm: 8, md: 4 }} key={idx}> <AgreementCard {...agreement} /></Col>)}
+                <Row gutter={[8, 16]}>
+                    {agreements.map((agreement, idx) => <Col span={{ xs: 24, sm: 8, md: 4 }} key={idx}> <AgreementCard {...agreement} /></Col>)}
+                </Row>
             </Col>
         </Row>
     )
