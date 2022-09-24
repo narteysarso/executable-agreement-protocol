@@ -15,7 +15,7 @@ export default function Navbar() {
                 alignItems: "center",
             }}
         >
-            <h3>Payslice</h3>
+            <img src="/logo.png" alt="logo" style={{height:'60px'}} />
 
             <Menu style={{flexGrow: 1, background: "transparent"}} mode="horizontal" >
                 <Menu.Item>
