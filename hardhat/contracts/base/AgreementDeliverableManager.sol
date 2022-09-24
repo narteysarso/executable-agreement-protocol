@@ -122,6 +122,8 @@ contract AgreementDeliverableManager is AgreementDeliverableExecuteManager {
         }
 
         validatorsCount[_validator.deliverable] += 1;
+
+        logger.LogValidatorAdded(address(this), _validator);
     }
 
 

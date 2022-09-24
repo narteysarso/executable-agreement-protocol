@@ -416,6 +416,11 @@
                     },
                     {
                         "internalType": "string",
+                        "name": "title",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
                         "name": "symbol",
                         "type": "string"
                     },

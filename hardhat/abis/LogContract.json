@@ -120,6 +120,37 @@
                 "type": "address"
             },
             {
+                "components": [
+                    {
+                        "internalType": "uint16",
+                        "name": "deliverable",
+                        "type": "uint16"
+                    },
+                    {
+                        "internalType": "address",
+                        "name": "_address",
+                        "type": "address"
+                    }
+                ],
+                "indexed": false,
+                "internalType": "struct Validator",
+                "name": "validator",
+                "type": "tuple"
+            }
+        ],
+        "name": "ValidatorCreated",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "proxy",
+                "type": "address"
+            },
+            {
                 "indexed": false,
                 "internalType": "uint16",
                 "name": "deliverableIndex",
@@ -321,6 +352,36 @@
             }
         ],
         "name": "LogDeliverableCompleted",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "proxy",
+                "type": "address"
+            },
+            {
+                "components": [
+                    {
+                        "internalType": "uint16",
+                        "name": "deliverable",
+                        "type": "uint16"
+                    },
+                    {
+                        "internalType": "address",
+                        "name": "_address",
+                        "type": "address"
+                    }
+                ],
+                "internalType": "struct Validator",
+                "name": "_validator",
+                "type": "tuple"
+            }
+        ],
+        "name": "LogValidatorAdded",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
