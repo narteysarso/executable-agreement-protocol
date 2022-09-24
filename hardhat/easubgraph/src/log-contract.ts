@@ -3,20 +3,21 @@ import {
   LogContract,
   AgreementCreated,
   DeliverableCompleted,
+  DeliverableCreated,
   ValidatorCreated,
   ValidatorVoted
 } from "../generated/LogContract/LogContract"
-import { ExecutableAgreement, Validator } from "../generated/schema"
+import { ExecutableAgreement, Validator, Deliverable } from "../generated/schema"
 
 export function handleAgreementCreated(event: AgreementCreated): void {
   // Entities can be loaded from the store using a string ID; this ID
   // needs to be unique across all entities of the same type
-  let entity = ExecutableAgreement.load(event.transaction.hash.toHex())
+  let entity = ExecutableAgreement.load(event.params.proxy.toHex())
 
   // Entities only exist after they have been saved to the store;
   // `null` checks allow to create entities on demand
   if (!entity) {
-    entity = new ExecutableAgreement(event.transaction.hash.toHex())
+    entity = new ExecutableAgreement(event.params.proxy.toHex())
 
     // Entity fields can be set using simple assignments
     // entity.count = BigInt.fromI32(0)
@@ -60,7 +61,16 @@ export function handleAgreementCreated(event: AgreementCreated): void {
   // None
 }
 
-export function handleDeliverableCompleted(event: DeliverableCompleted): void { }
+export function handleDeliverableCompleted(event: DeliverableCompleted): void {
+
+  let entity = Deliverable.load(event.params.proxy.toHex()+"-"+event.params.deliverableIndex.toString());
+
+  if(!entity) return;
+
+  entity.completed = true; 
+  entity.save();
+
+ }
 
 export function handleValidatorCreated(event: ValidatorCreated): void {
    // Entities can be loaded from the store using a string ID; this ID
@@ -78,7 +88,8 @@ export function handleValidatorCreated(event: ValidatorCreated): void {
 
   entity.proxy = event.params.proxy;
   entity.address = event.params.validator._address;
-  entity.deliverable = event.params.validator.deliverable;
+  entity.deliverableIndex = event.params.validator.deliverable;
+  entity.deliverable = event.params.proxy.toHex()+"-"+event.params.validator.deliverable.toString();
   entity.hasVoted = false;
 }
 
@@ -90,3 +101,29 @@ export function handleValidatorVoted(event: ValidatorVoted): void {
   entity.hasVoted = true;
   entity.save();
 }
+
+export function handleDeliverableCreated(event: DeliverableCreated): void {
+     // Entities can be loaded from the store using a string ID; this ID
+  // needs to be unique across all entities of the same type
+  let entity = Deliverable.load(event.params.proxy.toHex()+"-"+event.params.deliverableIndex.toString())
+
+  // Entities only exist after they have been saved to the store;
+  // `null` checks allow to create entities on demand
+  if (!entity) {
+    entity = new Deliverable(event.params.proxy.toHex()+"-"+event.params.deliverableIndex.toString())
+
+    // Entity fields can be set using simple assignments
+    // entity.count = BigInt.fromI32(0)
+  }
+
+  entity.proxy = event.params.proxy;
+  entity.description = event.params.deliverable.description;
+  entity.title = event.params.deliverable.title;
+  entity.validatorThreshold = event.params.deliverable.validatorThreshold;
+  entity.receiver = event.params.deliverable.receiver;
+  entity.totalSeconds = event.params.deliverable.totalSeconds;
+  entity.payoutAmount = event.params.deliverable.payoutAmount;
+  entity.agreement = event.params.proxy.toHex();
+  entity.completed = false;
+}
+

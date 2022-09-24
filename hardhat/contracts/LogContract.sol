@@ -24,6 +24,7 @@ contract LogContract {
 
     event AgreementCreated(address indexed proxy , LogAgreementData agreementData);
     event ValidatorCreated(address indexed proxy , Validator validator);
+    event DeliverableCreated(address indexed proxy ,uint16 deliverableIndex, Deliverable deliverable);
     
     event ValidatorVoted(
         address indexed proxy,
@@ -72,6 +73,14 @@ contract LogContract {
             emit DeliverableCompleted(proxy,_deliverableIndex,_executableIndex
         );
     }
+    function LogDeliverableAdded(
+            address proxy,
+            uint16 deliverableIndex,
+            Deliverable memory _deliverable
+        ) external {
+            emit DeliverableCreated(proxy, deliverableIndex, _deliverable);
+    }
+
     function LogValidatorAdded(
             address proxy,
             Validator memory _validator

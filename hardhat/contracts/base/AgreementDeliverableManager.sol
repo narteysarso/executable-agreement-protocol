@@ -47,12 +47,6 @@ contract AgreementDeliverableManager is AgreementDeliverableExecuteManager {
         uint16 deliverableIndex,
         address _validator
     );
-    event ValidatorVoted(
-        address indexed proxy,
-        uint16 deliverableIndex,
-        address _validator,
-        ValidatorVote _validatorVote
-    );
 
     // modifiers;
 
@@ -89,6 +83,8 @@ contract AgreementDeliverableManager is AgreementDeliverableExecuteManager {
         deliverable.receiver = _deliverable.receiver;
 
         deliverablesCount += 1;
+
+        logger.LogDeliverableAdded(address(this), (deliverablesCount - 1), _deliverable);
     }
 
     function _addValidator(Validator memory _validator)

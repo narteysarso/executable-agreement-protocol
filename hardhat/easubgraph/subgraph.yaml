@@ -6,7 +6,7 @@ dataSources:
     name: LogContract
     network: mumbai
     source:
-      address: "0x38D76d64B183b7415bfEF18A84a0E76d1A93AB7E"
+      address: "0xC1BC1631E7D7Ae9CfaBe82e17cfC0b76adAe1fcF"
       abi: LogContract
       startBlock: 28250744
     mapping:
@@ -16,6 +16,7 @@ dataSources:
       entities:
         - AgreementCreated
         - DeliverableCompleted
+        - DeliverableCreated
         - ValidatorCreated
         - ValidatorVoted
       abis:
@@ -26,6 +27,8 @@ dataSources:
           handler: handleAgreementCreated
         - event: DeliverableCompleted(indexed address,indexed uint256,indexed uint256)
           handler: handleDeliverableCompleted
+        - event: DeliverableCreated(indexed address,uint16,(uint16,uint24,uint256,string,string,address))
+          handler: handleDeliverableCreated
         - event: ValidatorCreated(indexed address,(uint16,address))
           handler: handleValidatorCreated
         - event: ValidatorVoted(indexed address,uint16,address,uint8)

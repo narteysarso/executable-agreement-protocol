@@ -120,6 +120,63 @@
         "type": "address"
       },
       {
+        "indexed": false,
+        "internalType": "uint16",
+        "name": "deliverableIndex",
+        "type": "uint16"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint16",
+            "name": "validatorThreshold",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint24",
+            "name": "totalSeconds",
+            "type": "uint24"
+          },
+          {
+            "internalType": "uint256",
+            "name": "payoutAmount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "string",
+            "name": "title",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "description",
+            "type": "string"
+          },
+          {
+            "internalType": "address",
+            "name": "receiver",
+            "type": "address"
+          }
+        ],
+        "indexed": false,
+        "internalType": "struct Deliverable",
+        "name": "deliverable",
+        "type": "tuple"
+      }
+    ],
+    "name": "DeliverableCreated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "proxy",
+        "type": "address"
+      },
+      {
         "components": [
           {
             "internalType": "uint16",
@@ -329,6 +386,61 @@
       }
     ],
     "name": "LogAgreementCreated",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "proxy",
+        "type": "address"
+      },
+      {
+        "internalType": "uint16",
+        "name": "deliverableIndex",
+        "type": "uint16"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint16",
+            "name": "validatorThreshold",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint24",
+            "name": "totalSeconds",
+            "type": "uint24"
+          },
+          {
+            "internalType": "uint256",
+            "name": "payoutAmount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "string",
+            "name": "title",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "description",
+            "type": "string"
+          },
+          {
+            "internalType": "address",
+            "name": "receiver",
+            "type": "address"
+          }
+        ],
+        "internalType": "struct Deliverable",
+        "name": "_deliverable",
+        "type": "tuple"
+      }
+    ],
+    "name": "LogDeliverableAdded",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

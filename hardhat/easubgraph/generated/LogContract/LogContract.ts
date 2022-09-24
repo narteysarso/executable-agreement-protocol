@@ -114,6 +114,60 @@ export class DeliverableCompleted__Params {
   }
 }
 
+export class DeliverableCreated extends ethereum.Event {
+  get params(): DeliverableCreated__Params {
+    return new DeliverableCreated__Params(this);
+  }
+}
+
+export class DeliverableCreated__Params {
+  _event: DeliverableCreated;
+
+  constructor(event: DeliverableCreated) {
+    this._event = event;
+  }
+
+  get proxy(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+
+  get deliverableIndex(): i32 {
+    return this._event.parameters[1].value.toI32();
+  }
+
+  get deliverable(): DeliverableCreatedDeliverableStruct {
+    return changetype<DeliverableCreatedDeliverableStruct>(
+      this._event.parameters[2].value.toTuple()
+    );
+  }
+}
+
+export class DeliverableCreatedDeliverableStruct extends ethereum.Tuple {
+  get validatorThreshold(): i32 {
+    return this[0].toI32();
+  }
+
+  get totalSeconds(): i32 {
+    return this[1].toI32();
+  }
+
+  get payoutAmount(): BigInt {
+    return this[2].toBigInt();
+  }
+
+  get title(): string {
+    return this[3].toString();
+  }
+
+  get description(): string {
+    return this[4].toString();
+  }
+
+  get receiver(): Address {
+    return this[5].toAddress();
+  }
+}
+
 export class ValidatorCreated extends ethereum.Event {
   get params(): ValidatorCreated__Params {
     return new ValidatorCreated__Params(this);
@@ -343,6 +397,72 @@ export class LogAgreementCreatedCall_agreementDataValidatorsStruct extends ether
 
   get _address(): Address {
     return this[1].toAddress();
+  }
+}
+
+export class LogDeliverableAddedCall extends ethereum.Call {
+  get inputs(): LogDeliverableAddedCall__Inputs {
+    return new LogDeliverableAddedCall__Inputs(this);
+  }
+
+  get outputs(): LogDeliverableAddedCall__Outputs {
+    return new LogDeliverableAddedCall__Outputs(this);
+  }
+}
+
+export class LogDeliverableAddedCall__Inputs {
+  _call: LogDeliverableAddedCall;
+
+  constructor(call: LogDeliverableAddedCall) {
+    this._call = call;
+  }
+
+  get proxy(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+
+  get deliverableIndex(): i32 {
+    return this._call.inputValues[1].value.toI32();
+  }
+
+  get _deliverable(): LogDeliverableAddedCall_deliverableStruct {
+    return changetype<LogDeliverableAddedCall_deliverableStruct>(
+      this._call.inputValues[2].value.toTuple()
+    );
+  }
+}
+
+export class LogDeliverableAddedCall__Outputs {
+  _call: LogDeliverableAddedCall;
+
+  constructor(call: LogDeliverableAddedCall) {
+    this._call = call;
+  }
+}
+
+export class LogDeliverableAddedCall_deliverableStruct extends ethereum.Tuple {
+  get validatorThreshold(): i32 {
+    return this[0].toI32();
+  }
+
+  get totalSeconds(): i32 {
+    return this[1].toI32();
+  }
+
+  get payoutAmount(): BigInt {
+    return this[2].toBigInt();
+  }
+
+  get title(): string {
+    return this[3].toString();
+  }
+
+  get description(): string {
+    return this[4].toString();
+  }
+
+  get receiver(): Address {
+    return this[5].toAddress();
   }
 }
 

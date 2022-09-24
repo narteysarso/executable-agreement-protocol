@@ -410,13 +410,30 @@ export class Deliverable extends Entity {
     }
   }
 
-  get status(): i32 {
-    let value = this.get("status");
-    return value!.toI32();
+  get completed(): boolean {
+    let value = this.get("completed");
+    return value!.toBoolean();
   }
 
-  set status(value: i32) {
-    this.set("status", Value.fromI32(value));
+  set completed(value: boolean) {
+    this.set("completed", Value.fromBoolean(value));
+  }
+
+  get agreement(): string | null {
+    let value = this.get("agreement");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set agreement(value: string | null) {
+    if (!value) {
+      this.unset("agreement");
+    } else {
+      this.set("agreement", Value.fromString(<string>value));
+    }
   }
 }
 
@@ -460,30 +477,13 @@ export class Validator extends Entity {
     this.set("proxy", Value.fromBytes(value));
   }
 
-  get deliverable(): i32 {
-    let value = this.get("deliverable");
-    return value!.toI32();
-  }
-
-  set deliverable(value: i32) {
-    this.set("deliverable", Value.fromI32(value));
-  }
-
-  get address(): Bytes | null {
+  get address(): Bytes {
     let value = this.get("address");
-    if (!value || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toBytes();
-    }
+    return value!.toBytes();
   }
 
-  set address(value: Bytes | null) {
-    if (!value) {
-      this.unset("address");
-    } else {
-      this.set("address", Value.fromBytes(<Bytes>value));
-    }
+  set address(value: Bytes) {
+    this.set("address", Value.fromBytes(value));
   }
 
   get hasVoted(): boolean {
@@ -493,6 +493,32 @@ export class Validator extends Entity {
 
   set hasVoted(value: boolean) {
     this.set("hasVoted", Value.fromBoolean(value));
+  }
+
+  get deliverableIndex(): i32 {
+    let value = this.get("deliverableIndex");
+    return value!.toI32();
+  }
+
+  set deliverableIndex(value: i32) {
+    this.set("deliverableIndex", Value.fromI32(value));
+  }
+
+  get deliverable(): string | null {
+    let value = this.get("deliverable");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set deliverable(value: string | null) {
+    if (!value) {
+      this.unset("deliverable");
+    } else {
+      this.set("deliverable", Value.fromString(<string>value));
+    }
   }
 }
 
