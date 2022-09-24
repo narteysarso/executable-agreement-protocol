@@ -7,25 +7,42 @@
 const hre = require("hardhat");
 
 async function main() {
-  const currentTimestampInSeconds = Math.round(Date.now() / 1000);
-  const ONE_YEAR_IN_SECS = 365 * 24 * 60 * 60;
-  const unlockTime = currentTimestampInSeconds + ONE_YEAR_IN_SECS;
+    const provider = new hre.ethers.providers.JsonRpcProvider(
+        process.env.MUMBAI_RPC_URL
+    );
 
-  const lockedAmount = hre.ethers.utils.parseEther("1");
+    const sf = await Framework.create({
+        chainId: (await provider.getNetwork()).chainId,
+        provider,
+    });
 
-  const Lock = await hre.ethers.getContractFactory("Lock");
-  const lock = await Lock.deploy(unlockTime, { value: lockedAmount });
+    // We get the contract to deploy
+    const SuperApps = await hre.ethers.getContractFactory("SuperApps");
+    //deploy the money router account using the proper host address and the address of the first signer
+    const superApps = await SuperApps.deploy()
 
-  await lock.deployed();
+    superApps.initialize(
+      sf.settings.config.hostAddress,
+      "0x440e65EAAb7A23be8b1a61108643B2cff2E5A967"
+    )
 
-  console.log(
-    `Lock with 1 ETH and unlock timestamp ${unlockTime} deployed to ${lock.address}`
-  );
+    await superApps.deployed();
+
+    const ExecutableAgreement = await hre.ethers.getContractFactory(
+        "ExecutableAgreement"
+    );
+    const executableAgreement = await ExecutableAgreement.deploy();
+
+    await executableAgreement.deployed();
+
+    console.log(
+        `Executable Agreement deployed at: ${executableAgreement.address}`
+    );
 }
 
 // We recommend this pattern to be able to use async/await everywhere
 // and properly handle errors.
 main().catch((error) => {
-  console.error(error);
-  process.exitCode = 1;
+    console.error(error);
+    process.exitCode = 1;
 });

@@ -1,0 +1,49 @@
+type ExecutableAgreement @entity {
+  id: ID!
+  proxy: Bytes! # address
+  offerType: Int! # uint8
+  duration: BigInt
+  contractSum: BigInt
+  targetToken: Bytes
+  issuer: Bytes
+  assenter: Bytes
+  position: String
+  contractTokenURI: String
+  name: String
+  title: String
+  symbol: String
+  description: String
+  location: String
+  status: Int
+}
+
+type Deliverable @entity {
+  id: ID!
+  proxy: Bytes
+  validatorThreshold: Int
+  totalSeconds: Int
+  payoutAmount: BigInt
+  title: String
+  description: String
+  receiver: Bytes
+  completed: Boolean
+  agreement: ExecutableAgreement
+}
+
+type Validator @entity {
+  id: ID!
+  proxy: Bytes! # address
+  address: Bytes!
+  hasVoted: Boolean
+  deliverableIndex: Int
+  deliverable: Deliverable
+}
+
+type Executor @entity{
+  id: ID!
+  proxy: Bytes! # address
+  deliverable: Int
+  timeLock: BigInt
+  address: Bytes
+  hasExecuted: Boolean
+}

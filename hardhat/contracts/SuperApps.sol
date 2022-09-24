@@ -7,8 +7,6 @@ import {ISuperfluidToken} from "@superfluid-finance/ethereum-contracts/contracts
 import {IConstantFlowAgreementV1} from "@superfluid-finance/ethereum-contracts/contracts/interfaces/agreements/IConstantFlowAgreementV1.sol";
 import {CFAv1Library} from "@superfluid-finance/ethereum-contracts/contracts/apps/CFAv1Library.sol";
 
-import "hardhat/console.sol";
-
 error Unauthorized();
 
 contract SuperApps {
@@ -113,7 +111,7 @@ contract SuperApps {
         ISuperfluidToken _token,
         address receiver,
         int96 _flowRate
-    ) public {
+    ) internal {
         if (!accountList[msg.sender] && msg.sender != owner)
             revert Unauthorized();
 
@@ -128,7 +126,7 @@ contract SuperApps {
         ISuperfluidToken _token,
         address receiver,
         int96 _flowRate
-    ) external {
+    ) internal {
         if (!accountList[msg.sender] && msg.sender != owner)
             revert Unauthorized();
 
@@ -139,7 +137,7 @@ contract SuperApps {
     /// @param _token Token to stop streaming.
     /// @param receiver Receiver of stream.
     function deleteFlowFromContract(ISuperfluidToken _token, address receiver)
-        public
+        internal
     {
         if (!accountList[msg.sender] && msg.sender != owner)
             revert Unauthorized();

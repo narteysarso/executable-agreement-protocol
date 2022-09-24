@@ -2,4 +2,7 @@ scaffold-eth/
 sismo-hub/
 super-examples/
 superfluid/
+remix-executable-agreement/
+tello/
+gitbot/
 *.env
