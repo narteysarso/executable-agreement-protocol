@@ -18,7 +18,7 @@ export async function subgraphQuery(url, query) {
     }
 }
 
-//query creators from narteysarso/genrez-celo graph
+
 export const getStreamingDataBTWSenderRecipient = async (sender, recipient) => {
     try {
         //if `searchkey` is not empty surround it with `''` to handle spaces
@@ -57,7 +57,70 @@ export const getStreamingDataBTWSenderRecipient = async (sender, recipient) => {
         console.log(error);
     }
 };
-//query creators from narteysarso/genrez-celo graph
+
+export const getValidatorsOf = async (address) => {
+    try {
+        //query data from the graph
+        const response = await subgraphQuery(process.env.REACT_APP_EA_GRAPH_URL,`query{ 
+            validators(first: 100, where: {address: "${address}"}) {
+                id
+                proxy
+                address
+                hasVoted
+                deliverable{
+                    id
+                    proxy
+                    validatorThreshold
+                    totalSeconds
+                    payoutAmount
+                    title
+                    description
+                    receiver
+                    completed
+                }
+              }
+            
+        }`);
+
+        return response?.validators
+
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const getValidatorsByDeliverableId = async (address, deliverableId) => {
+    try {
+        //query data from the graph
+        const response = await subgraphQuery(process.env.REACT_APP_EA_GRAPH_URL,`query{ 
+            validators( where: {address: "${address}", deliverable: ${deliverableId}}) {
+                id
+                proxy
+                address
+                hasVoted
+                deliverable{
+                    id
+                    proxy
+                    validatorThreshold
+                    totalSeconds
+                    payoutAmount
+                    title
+                    description
+                    receiver
+                    completed
+                }
+                
+              }
+            
+        }`);
+
+        return response?.validators
+
+    } catch (error) {
+        console.log(error);
+    }
+};
+
 export const getCreatedExecutableAgreements = async (issuer) => {
     try {
         //query data from the graph
@@ -89,7 +152,7 @@ export const getCreatedExecutableAgreements = async (issuer) => {
         console.log(error);
     }
 };
-//query creators from narteysarso/genrez-celo graph
+
 export const getCreatedExecutableAgreementsByTitle = async (issuer, title) => {
     try {
         //query data from the graph
@@ -122,7 +185,7 @@ export const getCreatedExecutableAgreementsByTitle = async (issuer, title) => {
     }
 };
 
-//query creators from narteysarso/genrez-celo graph
+
 export const getAssenterExecutableAgreements = async (signer) => {
     try {
         
@@ -155,7 +218,7 @@ export const getAssenterExecutableAgreements = async (signer) => {
         console.log(error);
     }
 };
-//query creators from narteysarso/genrez-celo graph
+
 export const getAssenterExecutableAgreementsByTitle = async (signer, title) => {
     try {
         

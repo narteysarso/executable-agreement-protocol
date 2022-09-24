@@ -1,8 +1,5 @@
-import { Avatar, Card, Col, Input, message, Row, Typography } from "antd";
-import { ethers } from "ethers";
-import makeBlockie from 'ethereum-blockies-base64';
-import { EllipsisOutlined } from '@ant-design/icons';
-import { Link } from "react-router-dom";
+import { Col, Input, message, Row, Typography } from "antd";
+
 
 import { useEffect, useState } from "react";
 import { useAccount } from "wagmi"

@@ -4,7 +4,7 @@ import Page404 from "../errors/404";
 import AgreementDetail from "./AgreementDetails";
 import Created from "./Created";
 import Pending from "./Pending";
-import Signed from "./Signed";
+import Validations from "./Validations";
 
 export default function Dashboard() {
 
@@ -20,6 +20,7 @@ export default function Dashboard() {
                 >
                     <Menu.Item><Link to="created">Created Agreements</Link></Menu.Item>
                     <Menu.Item><Link to="assigned">Assigned Agreements</Link></Menu.Item>
+                    <Menu.Item><Link to="validations">Assigned Validations</Link></Menu.Item>
                 </Menu>
             </Layout.Sider>
             <Layout.Content style={{ padding: '0 24px', minHeight: "85vh" }}>
@@ -37,6 +38,10 @@ function renderContent(path){
 
     if( path === "assigned"){
         return <Pending />
+    }
+    
+    if( path === "validations"){
+        return <Validations />
     }
 
     if(path === "agreements"){

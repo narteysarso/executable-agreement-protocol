@@ -2,7 +2,7 @@ import { Col, Input, message, Row, Typography } from "antd";
 
 import { useEffect, useState } from "react";
 import { useAccount } from "wagmi"
-import { getAssenterExecutableAgreements, getAssenterExecutableAgreementsByTitle, getExecutableAgreementsByTitle} from "../../utils/superfluid_queries";
+import { getAssenterExecutableAgreements, getAssenterExecutableAgreementsByTitle} from "../../utils/superfluid_queries";
 import AgreementCard from "../../components/AgreementCard";
 import Page404 from "../errors/404";
 
@@ -34,6 +34,7 @@ export default function Pending() {
         
         setAgreements(results);
     };
+    
     useEffect(() => {
         if(!address) return;
         loadAssenterAgreements(address);
