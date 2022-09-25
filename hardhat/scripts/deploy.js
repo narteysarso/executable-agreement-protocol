@@ -21,19 +21,44 @@ async function main() {
     //deploy the money router account using the proper host address and the address of the first signer
     const superApps = await SuperApps.deploy()
 
-    superApps.initialize(
-      sf.settings.config.hostAddress,
-      "0x440e65EAAb7A23be8b1a61108643B2cff2E5A967"
-    )
+    // superApps.initialize(
+    //   sf.settings.config.hostAddress,
+    //   "0x440e65EAAb7A23be8b1a61108643B2cff2E5A967"
+    // )
 
     await superApps.deployed();
 
     const ExecutableAgreement = await hre.ethers.getContractFactory(
         "ExecutableAgreement"
     );
+
+    const LogContract = await hre.ethers.getContractFactory(
+        "LogContract"
+    );
+
+    const AgreementFundsManagerContract = await hre.ethers.getContractFactory(
+        "AgreementFundsManager"
+    );
+
+    const AgreementOfferManagerContract = await hre.ethers.getContractFactory(
+        "AgreementOfferManager"
+    );
+
+    const AgreementSigningManagerContract = await hre.ethers.getContractFactory(
+        "AgreementSigningManagerContract"
+    );
+
+    const logContract = await LogContract.deploy();
+    const agreementSigningManagerContract = await AgreementSigningManagerContract.deploy();
+    const agreementFundsManagerContract = await AgreementFundsManagerContract.deploy();
+    const agreementOfferManagerContract = await AgreementOfferManagerContract.deploy();
     const executableAgreement = await ExecutableAgreement.deploy();
 
     await executableAgreement.deployed();
+    await logContract.deployed();
+    await agreementSigningManagerContract.deployed();
+    await agreementFundsManagerContract.deployed();
+    await agreementOfferManagerContract.deployed();
 
     console.log(
         `Executable Agreement deployed at: ${executableAgreement.address}`
