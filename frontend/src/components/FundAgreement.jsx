@@ -1,16 +1,22 @@
 import { Button, Divider, Form, Input, message, Modal, Select } from "antd";
-import { ethers } from "ethers";
+import {ethers} from "ethers";
 import { useState } from "react";
 import { chainId } from "wagmi";
-import { CHAIN_TOKENS, PAYMENT_TOKENS } from "../data/tokens";
-import { swapForSuperToken } from "../utils/superToken";
+import {  PAYMENT_TOKENS } from "../data/tokens";
+import useAgreementContract from "../hooks/useAgreementContract";
+import { getProvider } from "../utils/helpers";
 
-function UpgradeTokenForm() {
+
+function FundAgreementForm({proxy}) {
     const [loading, setLoading] = useState(false);
-    const handleOnFinish = async ({ fromToken, toToken, amount }) => {
+    const {fundAgreement} = useAgreementContract()
+    const handleOnFinish = async ({ targetToken, amount }) => {
         try {
             setLoading(true);
-            await swapForSuperToken(fromToken, toToken, ethers.utils.parseEther(amount), chainId.polygonMumbai);
+            
+            const provider = getProvider();
+
+            await fundAgreement(proxy, targetToken, ethers.utils.parseEther(amount),  provider.getSigner());
             
         } catch (error) {
             message.error(error.message);
@@ -21,19 +27,13 @@ function UpgradeTokenForm() {
     }
     return (
         <Form onFinish={handleOnFinish} disabled={loading}>
-            <Form.Item label="From Token" hasFeedback name={"fromToken"}>
-                <Select size="large" placeholder="Select token used for payment" allowClear>
-                    {Object.entries(CHAIN_TOKENS[chainId.polygonMumbai]).map(([k, v], idx) => (<Select.Option key={idx} value={v}>{k}</Select.Option>))}
-                </Select>
-            </Form.Item>
-            <Form.Item label="Amout" hasFeedback name={"amount"} rules={[{ required: true }]}>
-                <Input type="number" size="large" placeholder="Amount to upgrade" min={0.02} />
-            </Form.Item>
-            <Divider />
-            <Form.Item label="Super Token" hasFeedback name={"toToken"}>
+            <Form.Item label="Super Token" hasFeedback name={"targetToken"}>
                 <Select size="large" placeholder="Select token used for payment" allowClear>
                     {Object.entries(PAYMENT_TOKENS[chainId.polygonMumbai]).map(([k, v], idx) => (<Select.Option key={idx} value={v}>{k}</Select.Option>))}
                 </Select>
+            </Form.Item>
+            <Form.Item label="Amout" hasFeedback name={"amount"} rules={[{ required: true }]}>
+                <Input type="number" size="large" placeholder="Amount to upgrade" min={1} />
             </Form.Item>
 
             <Form.Item>
@@ -42,14 +42,14 @@ function UpgradeTokenForm() {
                 </Button>
                 <Divider type="vertical" />
                 <Button type="primary" htmlType="submit" loading={loading}>
-                    Upgrade
+                    Fund
                 </Button>
             </Form.Item>
         </Form>
     )
 }
 
-export default function UpgradeTokens() {
+export default function FundAgreement({proxy}) {
     const [open, setOpen] = useState(false);
 
     const showModal = () => {
@@ -63,12 +63,12 @@ export default function UpgradeTokens() {
     return (
         <>
             <Modal open={open}
-                title="Upgrade Token to SuperToken"
+                title="Fund Agreement"
                 onCancel={handleCancel}
                 footer={[]}>
-                <UpgradeTokenForm />
+                <FundAgreementForm proxy={proxy} />
             </Modal>
-            <Button onClick={showModal}>Upgrade Tokens</Button>
+            <Button onClick={showModal}>Fund Agreement</Button>
         </>
     )
 }

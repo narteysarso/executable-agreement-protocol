@@ -7,7 +7,7 @@ import FactoryABI from "../abis/ExecutableAgreementProxyFactory.json";
 import ExecutableAgreementABI from "../abis/ExecutableAgreement.json";
 import superToken from "../utils/superToken";
 import { TOKEN_SYMBOL } from "../data/tokens";
-import { getContract, getProvider } from "../utils/helpers";
+import { getContract, getExecutableContract, getProvider } from "../utils/helpers";
 
 
 export default function useAgreementContract() {
@@ -19,7 +19,7 @@ export default function useAgreementContract() {
         const modal = Modal.success({
             title: 'Please wait...',
             content: `Preparing agreement`
-          });
+        });
 
         const preparedData = prepareAgreementData({ ...data });
 
@@ -43,7 +43,7 @@ export default function useAgreementContract() {
 
         modal.update({
             content: `Uploading to NFT.storage`,
-          });
+        });
 
         //Create NFT
         const metadata = await store(preparedData);
@@ -53,7 +53,7 @@ export default function useAgreementContract() {
 
         modal.update({
             content: `Preparing contract`,
-          });
+        });
         // create agreement on blockchain
         const proxyFactoryContract = await getContract(FactoryABI.address, FactoryABI.abi);
 
@@ -79,9 +79,10 @@ export default function useAgreementContract() {
         // console.log(agreementInfo);
         const execTxn = await executableAgreementProxy.createAgreement(agreementInfo);
         await execTxn.wait();
+
         modal.update({
             content: `Please approve token transfer`,
-          });
+        });
 
         // transfer targetTokens to fundsManager contract
         const fundsManagerAddress = await executableAgreementProxy.agreementFundsManager();
@@ -95,6 +96,33 @@ export default function useAgreementContract() {
         });
 
         modal.destroy();
+    }
+
+    async function fundAgreement(proxy, targetToken, amount, signer) {
+
+        const token = await superToken(TOKEN_SYMBOL[chainId.polygonMumbai][targetToken], chainId.polygonMumbai, signer);
+
+        const balance = await token.balanceOf({
+            account: address,
+            providerOrSigner: signer
+        })
+
+        if (balance < amount) {
+            message.error("Insufficient token balance")
+            return;
+        }
+
+        const executableAgreementProxy = getExecutableContract(proxy);
+        // transfer targetTokens to fundsManager contract
+        const fundsManagerAddress = await executableAgreementProxy.agreementFundsManager();
+
+        // console.log(fundsManagerAddress);
+
+        const tokenTransfer = token.transfer({ receiver: fundsManagerAddress, amount });
+
+        await tokenTransfer.exec(signer).then(tx => {
+            console.log(tx)
+        });
     }
 
     function prepareAgreementData({ infoData, clauseData, deliverableData, validatorsData, tokenizationData } = {}) {
@@ -159,18 +187,9 @@ export default function useAgreementContract() {
 
     }
 
-    async function loadSignedAgreements({ address } = {}) {
-
-    }
-
-    async function loadIssuedAgreements({ address } = {}) {
-
-    }
-
 
     return Object.freeze({
         createAgreement,
-        loadIssuedAgreements,
-        loadSignedAgreements
+        fundAgreement
     })
 }

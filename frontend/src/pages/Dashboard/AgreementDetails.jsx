@@ -1,4 +1,4 @@
-import { Avatar, Button, Col, List, message, Row, Skeleton, Typography } from "antd";
+import { Avatar, Button, Col, List, message, Row, Skeleton, Space, Typography } from "antd";
 import { useState, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import { useLocation } from "react-router-dom";
@@ -9,6 +9,7 @@ import { chainId, useAccount } from "wagmi";
 import { TOKEN_SYMBOL } from "../../data/tokens";
 import { OFFERTYPES } from "../../data";
 import { getExecutableContract, getFundContract, getSigningManagerContract,  weiToEth } from "../../utils/helpers";
+import FundAgreement from "../../components/FundAgreement";
 
 function SuperFluidList({ issuer, assenter, targetToken, proxy }) {
     const [loading, setLoading] = useState(false);
@@ -66,6 +67,12 @@ function SuperFluidList({ issuer, assenter, targetToken, proxy }) {
                 </List.Item>
             )}
         />
+    )
+}
+
+function FundContract(){
+    return (
+        <Button>Fund Contract</Button>
     )
 }
 
@@ -187,7 +194,10 @@ export default function AgreementDetail() {
             <Col span={16}>
                 <div style={{ width: "100%", display: "flex", flexDirection: "row", alignItems: "center", padding: "1vh 2vw", justifyContent: "space-between" }}>
                     <Typography.Title level={3}>Agreement</Typography.Title>
+                    <Space>
+                    <FundAgreement proxy={agreement.proxy}/>
                     <SignAgreement proxyAddress={agreement.proxy} />
+                    </Space>
                 </div>
                 <ReactMarkdown >
                     {`## ${agreementContent?.properties.title}  \r\r ${agreementContent?.description} \r\r 
