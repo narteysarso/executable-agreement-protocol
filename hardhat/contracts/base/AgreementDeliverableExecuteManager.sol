@@ -11,7 +11,8 @@ import "../LogContract.sol";
 contract AgreementDeliverableExecuteManager {
     
     address internal constant SENTINEL_FUNDS_MANAGER = address(0x1);
-
+    address internal constant TELLOR_VALIDATOR_ADDRESS = address(0x2);
+    
     /// @dev tracks funds manager contract
     AgreementFundsManager public agreementFundsManager;
 

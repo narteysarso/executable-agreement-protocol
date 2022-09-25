@@ -2,7 +2,8 @@
   "name": "hardhat-project",
   "dependencies": {
     "@graphprotocol/graph-cli": "^0.33.1",
-    "@openzeppelin/contracts": "^4.7.3"
+    "@openzeppelin/contracts": "^4.7.3",
+    "usingtellor": "^4.0.7"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^1.0.2",

@@ -117,6 +117,11 @@ contract AgreementDeliverableManager is AgreementDeliverableExecuteManager {
             validators[_validator.deliverable][SENTINEL_VALIDATORS] = _validator._address;
         }
 
+        // Tellor validator is used then create query
+        if(validator._address == TELLOR_VALIDATOR_ADDRESS){
+            //TODO
+        }
+
         validatorsCount[_validator.deliverable] += 1;
 
         logger.LogValidatorAdded(address(this), _validator);
