@@ -75,12 +75,12 @@ export function handleDeliverableCompleted(event: DeliverableCompleted): void {
 export function handleValidatorCreated(event: ValidatorCreated): void {
    // Entities can be loaded from the store using a string ID; this ID
   // needs to be unique across all entities of the same type
-  let entity = Validator.load(event.params.proxy.toHex()+"-"+event.params.validator.deliverable.toString())
+  let entity = Validator.load(event.params.proxy.toHex()+"-"+event.params.validator.deliverable.toString()+"-"+event.params.validator._address.toHex())
 
   // Entities only exist after they have been saved to the store;
   // `null` checks allow to create entities on demand
   if (!entity) {
-    entity = new Validator(event.params.proxy.toHex()+"-"+event.params.validator.deliverable.toString())
+    entity = new Validator(event.params.proxy.toHex()+"-"+event.params.validator.deliverable.toString()+"-"+event.params.validator._address.toHex())
 
     // Entity fields can be set using simple assignments
     // entity.count = BigInt.fromI32(0)
@@ -96,7 +96,7 @@ export function handleValidatorCreated(event: ValidatorCreated): void {
 }
 
 export function handleValidatorVoted(event: ValidatorVoted): void { 
-  let entity = Validator.load(event.params.proxy.toHex()+"-"+event.params.deliverableIndex.toString());
+  let entity = Validator.load(event.params.proxy.toHex()+"-"+event.params.deliverableIndex.toString()+"-"+event.params.validator.toHex());
 
   if(!entity) return;
 

@@ -4,5 +4,4 @@ super-examples/
 superfluid/
 remix-executable-agreement/
 tello/
-gitbot/
 *.env

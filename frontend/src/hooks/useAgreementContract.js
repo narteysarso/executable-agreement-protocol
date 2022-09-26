@@ -23,6 +23,8 @@ export default function useAgreementContract() {
 
         const preparedData = prepareAgreementData({ ...data });
 
+        
+
         const provider = await getProvider();
 
         const token = await superToken(TOKEN_SYMBOL[chainId.polygonMumbai][preparedData.targetToken], chainId.polygonMumbai, provider.getSigner());

@@ -144,12 +144,12 @@ export default function AgreementDetail() {
     }
 
     const formatValidators = (validators, index) => {
-
-        if (!Array.isArray(validators[index])) {
+        console.log(validators);
+        if (!Array.isArray(validators)) {
             return `- ${validators[index]._address}`
         }
-        return validators[index].reduce((acc, cur) => {
-            return `${acc} - ${cur._address}`
+        return validators.reduce((acc, cur) => {
+            return `${acc} - ${cur._address} \r\r \t \t`
         }, "")
     }
 
