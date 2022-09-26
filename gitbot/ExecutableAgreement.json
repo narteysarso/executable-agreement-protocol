@@ -1,0 +1,900 @@
+{
+    "abi":  [
+        {
+            "anonymous": false,
+            "inputs": [
+                {
+                    "indexed": true,
+                    "internalType": "address",
+                    "name": "proxy",
+                    "type": "address"
+                },
+                {
+                    "indexed": false,
+                    "internalType": "uint16",
+                    "name": "deliverableIndex",
+                    "type": "uint16"
+                },
+                {
+                    "indexed": false,
+                    "internalType": "address",
+                    "name": "user",
+                    "type": "address"
+                }
+            ],
+            "name": "DeliverableAdded",
+            "type": "event"
+        },
+        {
+            "anonymous": false,
+            "inputs": [
+                {
+                    "indexed": true,
+                    "internalType": "address",
+                    "name": "proxy",
+                    "type": "address"
+                },
+                {
+                    "indexed": true,
+                    "internalType": "uint256",
+                    "name": "deliverableIndex",
+                    "type": "uint256"
+                },
+                {
+                    "indexed": true,
+                    "internalType": "uint256",
+                    "name": "_executorIndex",
+                    "type": "uint256"
+                }
+            ],
+            "name": "DeliverableCompleted",
+            "type": "event"
+        },
+        {
+            "anonymous": false,
+            "inputs": [
+                {
+                    "indexed": true,
+                    "internalType": "address",
+                    "name": "proxy",
+                    "type": "address"
+                },
+                {
+                    "indexed": true,
+                    "internalType": "uint256",
+                    "name": "deliverableIndex",
+                    "type": "uint256"
+                },
+                {
+                    "indexed": true,
+                    "internalType": "uint256",
+                    "name": "_executorcount",
+                    "type": "uint256"
+                }
+            ],
+            "name": "DeliverableExecutorAdded",
+            "type": "event"
+        },
+        {
+            "anonymous": false,
+            "inputs": [
+                {
+                    "indexed": true,
+                    "internalType": "address",
+                    "name": "proxy",
+                    "type": "address"
+                },
+                {
+                    "indexed": true,
+                    "internalType": "uint256",
+                    "name": "deliverableIndex",
+                    "type": "uint256"
+                },
+                {
+                    "indexed": true,
+                    "internalType": "uint256",
+                    "name": "_executorIndex",
+                    "type": "uint256"
+                }
+            ],
+            "name": "DeliverableExecutorRemoved",
+            "type": "event"
+        },
+        {
+            "anonymous": false,
+            "inputs": [
+                {
+                    "indexed": true,
+                    "internalType": "address",
+                    "name": "proxy",
+                    "type": "address"
+                },
+                {
+                    "indexed": false,
+                    "internalType": "uint16",
+                    "name": "deliverableIndex",
+                    "type": "uint16"
+                },
+                {
+                    "indexed": false,
+                    "internalType": "address",
+                    "name": "user",
+                    "type": "address"
+                }
+            ],
+            "name": "DeliverableRemoved",
+            "type": "event"
+        },
+        {
+            "anonymous": false,
+            "inputs": [
+                {
+                    "indexed": true,
+                    "internalType": "address",
+                    "name": "proxy",
+                    "type": "address"
+                },
+                {
+                    "indexed": false,
+                    "internalType": "uint256",
+                    "name": "numOfDeliverables",
+                    "type": "uint256"
+                },
+                {
+                    "components": [
+                        {
+                            "internalType": "uint16",
+                            "name": "validatorThreshold",
+                            "type": "uint16"
+                        },
+                        {
+                            "internalType": "uint24",
+                            "name": "totalSeconds",
+                            "type": "uint24"
+                        },
+                        {
+                            "internalType": "uint256",
+                            "name": "payoutAmount",
+                            "type": "uint256"
+                        },
+                        {
+                            "internalType": "string",
+                            "name": "title",
+                            "type": "string"
+                        },
+                        {
+                            "internalType": "string",
+                            "name": "description",
+                            "type": "string"
+                        },
+                        {
+                            "internalType": "address",
+                            "name": "receiver",
+                            "type": "address"
+                        }
+                    ],
+                    "indexed": false,
+                    "internalType": "struct Deliverable[]",
+                    "name": "deliverables",
+                    "type": "tuple[]"
+                }
+            ],
+            "name": "DeliverableSetup",
+            "type": "event"
+        },
+        {
+            "anonymous": false,
+            "inputs": [
+                {
+                    "indexed": true,
+                    "internalType": "address",
+                    "name": "proxy",
+                    "type": "address"
+                },
+                {
+                    "indexed": false,
+                    "internalType": "uint16",
+                    "name": "deliverableIndex",
+                    "type": "uint16"
+                },
+                {
+                    "indexed": false,
+                    "internalType": "uint16",
+                    "name": "validatorIndex",
+                    "type": "uint16"
+                }
+            ],
+            "name": "DeliverableValidated",
+            "type": "event"
+        },
+        {
+            "anonymous": false,
+            "inputs": [
+                {
+                    "indexed": true,
+                    "internalType": "address",
+                    "name": "proxy",
+                    "type": "address"
+                },
+                {
+                    "indexed": false,
+                    "internalType": "uint16",
+                    "name": "deliverableIndex",
+                    "type": "uint16"
+                },
+                {
+                    "indexed": false,
+                    "internalType": "address",
+                    "name": "_validator",
+                    "type": "address"
+                }
+            ],
+            "name": "ValidatorAdded",
+            "type": "event"
+        },
+        {
+            "anonymous": false,
+            "inputs": [
+                {
+                    "indexed": true,
+                    "internalType": "address",
+                    "name": "proxy",
+                    "type": "address"
+                },
+                {
+                    "indexed": false,
+                    "internalType": "uint16",
+                    "name": "deliverableIndex",
+                    "type": "uint16"
+                },
+                {
+                    "indexed": false,
+                    "internalType": "address",
+                    "name": "_validator",
+                    "type": "address"
+                }
+            ],
+            "name": "ValidatorRemoved",
+            "type": "event"
+        },
+        {
+            "inputs": [],
+            "name": "agreementFundsManager",
+            "outputs": [
+                {
+                    "internalType": "contract AgreementFundsManager",
+                    "name": "",
+                    "type": "address"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [],
+            "name": "agreementOfferManager",
+            "outputs": [
+                {
+                    "internalType": "contract AgreementOfferManager",
+                    "name": "",
+                    "type": "address"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [],
+            "name": "agreementSigningManager",
+            "outputs": [
+                {
+                    "internalType": "contract AgreementSigningManager",
+                    "name": "",
+                    "type": "address"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [],
+            "name": "balance",
+            "outputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "",
+                    "type": "uint256"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [],
+            "name": "contractTokenURI",
+            "outputs": [
+                {
+                    "internalType": "string",
+                    "name": "",
+                    "type": "string"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [],
+            "name": "contratSum",
+            "outputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "",
+                    "type": "uint256"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "components": [
+                        {
+                            "internalType": "enum OfferType",
+                            "name": "offerType",
+                            "type": "uint8"
+                        },
+                        {
+                            "internalType": "uint64",
+                            "name": "duration",
+                            "type": "uint64"
+                        },
+                        {
+                            "internalType": "uint256",
+                            "name": "contractSum",
+                            "type": "uint256"
+                        },
+                        {
+                            "internalType": "address",
+                            "name": "targetToken",
+                            "type": "address"
+                        },
+                        {
+                            "internalType": "address",
+                            "name": "issuer",
+                            "type": "address"
+                        },
+                        {
+                            "internalType": "address",
+                            "name": "assenter",
+                            "type": "address"
+                        },
+                        {
+                            "internalType": "string",
+                            "name": "position",
+                            "type": "string"
+                        },
+                        {
+                            "internalType": "string",
+                            "name": "contractTokenURI",
+                            "type": "string"
+                        },
+                        {
+                            "internalType": "string",
+                            "name": "name",
+                            "type": "string"
+                        },
+                        {
+                            "internalType": "string",
+                            "name": "title",
+                            "type": "string"
+                        },
+                        {
+                            "internalType": "string",
+                            "name": "symbol",
+                            "type": "string"
+                        },
+                        {
+                            "internalType": "string",
+                            "name": "description",
+                            "type": "string"
+                        },
+                        {
+                            "internalType": "string",
+                            "name": "location",
+                            "type": "string"
+                        },
+                        {
+                            "components": [
+                                {
+                                    "internalType": "uint16",
+                                    "name": "validatorThreshold",
+                                    "type": "uint16"
+                                },
+                                {
+                                    "internalType": "uint24",
+                                    "name": "totalSeconds",
+                                    "type": "uint24"
+                                },
+                                {
+                                    "internalType": "uint256",
+                                    "name": "payoutAmount",
+                                    "type": "uint256"
+                                },
+                                {
+                                    "internalType": "string",
+                                    "name": "title",
+                                    "type": "string"
+                                },
+                                {
+                                    "internalType": "string",
+                                    "name": "description",
+                                    "type": "string"
+                                },
+                                {
+                                    "internalType": "address",
+                                    "name": "receiver",
+                                    "type": "address"
+                                }
+                            ],
+                            "internalType": "struct Deliverable[]",
+                            "name": "deliverables",
+                            "type": "tuple[]"
+                        },
+                        {
+                            "components": [
+                                {
+                                    "internalType": "uint16",
+                                    "name": "deliverable",
+                                    "type": "uint16"
+                                },
+                                {
+                                    "internalType": "uint256",
+                                    "name": "timeLock",
+                                    "type": "uint256"
+                                },
+                                {
+                                    "internalType": "address",
+                                    "name": "_address",
+                                    "type": "address"
+                                }
+                            ],
+                            "internalType": "struct Executor[]",
+                            "name": "executors",
+                            "type": "tuple[]"
+                        },
+                        {
+                            "components": [
+                                {
+                                    "internalType": "uint16",
+                                    "name": "deliverable",
+                                    "type": "uint16"
+                                },
+                                {
+                                    "internalType": "address",
+                                    "name": "_address",
+                                    "type": "address"
+                                }
+                            ],
+                            "internalType": "struct Validator[]",
+                            "name": "validators",
+                            "type": "tuple[]"
+                        }
+                    ],
+                    "internalType": "struct AgreementData",
+                    "name": "data",
+                    "type": "tuple"
+                }
+            ],
+            "name": "createAgreement",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "",
+                    "type": "uint256"
+                }
+            ],
+            "name": "deliverableExecutorCount",
+            "outputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "",
+                    "type": "uint256"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "uint16",
+                    "name": "",
+                    "type": "uint16"
+                }
+            ],
+            "name": "deliverables",
+            "outputs": [
+                {
+                    "internalType": "uint16",
+                    "name": "validatorThreshold",
+                    "type": "uint16"
+                },
+                {
+                    "internalType": "uint24",
+                    "name": "totalSeconds",
+                    "type": "uint24"
+                },
+                {
+                    "internalType": "uint256",
+                    "name": "payoutAmount",
+                    "type": "uint256"
+                },
+                {
+                    "internalType": "string",
+                    "name": "title",
+                    "type": "string"
+                },
+                {
+                    "internalType": "string",
+                    "name": "description",
+                    "type": "string"
+                },
+                {
+                    "internalType": "address",
+                    "name": "receiver",
+                    "type": "address"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [],
+            "name": "duration",
+            "outputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "",
+                    "type": "uint256"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "",
+                    "type": "uint256"
+                }
+            ],
+            "name": "executors",
+            "outputs": [
+                {
+                    "internalType": "uint16",
+                    "name": "deliverable",
+                    "type": "uint16"
+                },
+                {
+                    "internalType": "uint256",
+                    "name": "timeLock",
+                    "type": "uint256"
+                },
+                {
+                    "internalType": "address",
+                    "name": "_address",
+                    "type": "address"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "uint16",
+                    "name": "_deliverableIndex",
+                    "type": "uint16"
+                }
+            ],
+            "name": "getValidators",
+            "outputs": [
+                {
+                    "internalType": "address[]",
+                    "name": "",
+                    "type": "address[]"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "_signer",
+                    "type": "address"
+                }
+            ],
+            "name": "hasSigned",
+            "outputs": [
+                {
+                    "internalType": "bool",
+                    "name": "",
+                    "type": "bool"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "_signingManager",
+                    "type": "address"
+                },
+                {
+                    "internalType": "address",
+                    "name": "_offerManager",
+                    "type": "address"
+                },
+                {
+                    "internalType": "address",
+                    "name": "_fundsManager",
+                    "type": "address"
+                },
+                {
+                    "internalType": "address",
+                    "name": "_logger",
+                    "type": "address"
+                }
+            ],
+            "name": "initialize",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "_signer",
+                    "type": "address"
+                }
+            ],
+            "name": "isSigner",
+            "outputs": [
+                {
+                    "internalType": "bool",
+                    "name": "",
+                    "type": "bool"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [],
+            "name": "location",
+            "outputs": [
+                {
+                    "internalType": "string",
+                    "name": "",
+                    "type": "string"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [],
+            "name": "logger",
+            "outputs": [
+                {
+                    "internalType": "contract LogContract",
+                    "name": "",
+                    "type": "address"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [],
+            "name": "name",
+            "outputs": [
+                {
+                    "internalType": "string",
+                    "name": "",
+                    "type": "string"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [],
+            "name": "owner",
+            "outputs": [
+                {
+                    "internalType": "address",
+                    "name": "",
+                    "type": "address"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [],
+            "name": "position",
+            "outputs": [
+                {
+                    "internalType": "string",
+                    "name": "",
+                    "type": "string"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [],
+            "name": "signAgreement",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [],
+            "name": "symbol",
+            "outputs": [
+                {
+                    "internalType": "string",
+                    "name": "",
+                    "type": "string"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [],
+            "name": "targetToken",
+            "outputs": [
+                {
+                    "internalType": "address",
+                    "name": "",
+                    "type": "address"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [],
+            "name": "title",
+            "outputs": [
+                {
+                    "internalType": "string",
+                    "name": "",
+                    "type": "string"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "uint16",
+                    "name": "",
+                    "type": "uint16"
+                }
+            ],
+            "name": "validateCounts",
+            "outputs": [
+                {
+                    "internalType": "uint16",
+                    "name": "",
+                    "type": "uint16"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "uint16",
+                    "name": "",
+                    "type": "uint16"
+                },
+                {
+                    "internalType": "address",
+                    "name": "",
+                    "type": "address"
+                }
+            ],
+            "name": "validatorVotes",
+            "outputs": [
+                {
+                    "internalType": "enum ValidatorVote",
+                    "name": "",
+                    "type": "uint8"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "uint16",
+                    "name": "",
+                    "type": "uint16"
+                },
+                {
+                    "internalType": "address",
+                    "name": "",
+                    "type": "address"
+                }
+            ],
+            "name": "validators",
+            "outputs": [
+                {
+                    "internalType": "address",
+                    "name": "",
+                    "type": "address"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "uint16",
+                    "name": "",
+                    "type": "uint16"
+                }
+            ],
+            "name": "validatorsCount",
+            "outputs": [
+                {
+                    "internalType": "uint16",
+                    "name": "",
+                    "type": "uint16"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "uint16",
+                    "name": "_deliverableIndex",
+                    "type": "uint16"
+                },
+                {
+                    "internalType": "enum ValidatorVote",
+                    "name": "_vote",
+                    "type": "uint8"
+                }
+            ],
+            "name": "vote",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        }
+    ]
+}

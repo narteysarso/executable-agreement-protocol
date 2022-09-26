@@ -1,0 +1,35 @@
+{
+  "name": "gitbot",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A Probot app",
+  "author": "narteysarso",
+  "license": "ISC",
+  "homepage": "https://github.com//",
+  "keywords": [
+    "probot",
+    "github",
+    "probot-app"
+  ],
+  "scripts": {
+    "start": "probot run ./index.js",
+    "test": "jest"
+  },
+  "dependencies": {
+    "axios": "^0.27.2",
+    "ethers": "^5.7.1",
+    "probot": "^12.2.4"
+  },
+  "devDependencies": {
+    "dotenv": "^16.0.2",
+    "jest": "^28.0.0",
+    "nock": "^13.0.5",
+    "smee-client": "^1.2.2"
+  },
+  "engines": {
+    "node": ">= 10.13.0"
+  },
+  "jest": {
+    "testEnvironment": "node"
+  }
+}
