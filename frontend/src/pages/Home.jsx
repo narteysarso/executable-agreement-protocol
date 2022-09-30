@@ -1,5 +1,5 @@
 import { Typography, Button, Row, Col } from 'antd'
-import { ArrowRightOutlined } from '@ant-design/icons';
+import { GithubOutlined} from '@ant-design/icons';
 import Lottie from "react-lottie";
 
 import scanningAnimation from '../lottie-animations/scanning.json'
@@ -29,8 +29,11 @@ export default function Home() {
                         width="10vw" style={{ background: 'transparent' }} />
                 </Col>
             </Row>
-            <div style={{ display: "flex" }}>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
                <Typography.Paragraph>Smart Legal Contract</Typography.Paragraph>
+               <p>
+               <Button shape="circle" size="large" href="https://github.com/narteysarso/executable-agreement-protocol" target="_blank" rel="noreferrer" icon={<GithubOutlined />} />
+               </p>
             </div>
             <div>
                 <div style={{ position: "absolute", right: "10px", top: "-120px", width: "150px", background: "#9bb3e7", height: "150px", transform: "rotate(-45deg)" }}></div>
